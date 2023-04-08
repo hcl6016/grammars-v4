@@ -591,8 +591,18 @@ FractionalConstant
     ;
 
 
+fragment
+StringLiteralOne
+    :   '"' SChar* '"'
+    ;
+
+fragment
+StringLiteralMulti
+    : '"' SChar* '\\'Newline (SChar* '\\'Newline)* SChar* '"'
+    ;
+
 StringLiteral
-    :   ('L')? '"' SChar* '"' //L"abc" - elements are ints
+    :   ('L')? (StringLiteralOne|StringLiteralMulti) //L"abc" - elements are ints
     ;
 
 fragment
@@ -667,9 +677,3 @@ Preprocessor
     :   '#' ~[\r\n]*
         -> skip
     ;
-
-JoinLines
-    : ' '* '\\' ' '* Newline
-       -> skip
-    ;
-
