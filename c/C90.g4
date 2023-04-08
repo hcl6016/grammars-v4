@@ -64,7 +64,7 @@ functionSpecifier
 
 //if typeSpecifier not spedified : default return int
 functionDeclaration
-    :   '__extension__'? gccDeclaratorExtension1* storageFuncSpecifier* functionSpecifier? gccDeclaratorExtension1* typeSpecifier? gccDeclaratorExtension1* Identifier function gccDeclaratorExtension2* ';'
+    :   '__extension__'? gccDeclaratorExtension1* storageFuncSpecifier* functionSpecifier? gccDeclaratorExtension1* typeSpecifier? gccDeclaratorExtension1* visualExtension Identifier function gccDeclaratorExtension2* ';'
     ;
 
 functionDefinition
@@ -412,6 +412,10 @@ typeDefinition
     : '__extension__'? 'typedef' typeQualifier* type fieldDeclarator gccAttributeSpecifier? ';'
     ;
 
+visualExtension
+    : '__cdecl'
+    ;
+
 gccDeclaratorExtension1  //__attribute__ ((visibility ("default"))) or ((__always_inline__))
     : '__attribute__' '(' '(' Identifier ')' ')'
     | '__attribute__' '(' '(' Identifier '(' integerConstant ')' ')' ')'
@@ -478,6 +482,7 @@ Nondigit
 
 integerConstant
     :   sign? DecimalConstant
+    |   BinaryConstant
     |   OctalConstant
     |   HexadecimalConstant //to do integer suffix?
     ;
@@ -529,6 +534,13 @@ OctalDigit
     :   [0-7]
     ;
 
+
+fragment
+BinaryDigit
+    :   [01]
+    ;
+
+
 fragment
 HexadecimalDigit
     :   [0-9a-fA-F]
@@ -536,6 +548,10 @@ HexadecimalDigit
 
 OctalConstant
     :   '0' OctalDigit* IntegerSuffix?
+    ;
+
+BinaryConstant
+    :   '0'[Bb] BinaryDigit* IntegerSuffix?
     ;
 
 HexadecimalConstant
@@ -640,8 +656,20 @@ BlockComment
         -> skip
     ;
 
+//!WARNING! test extension, not C90 standard
+LineComment
+    :   '//' ~[\r\n]*
+        -> skip
+    ;
+
+
 Preprocessor
     :   '#' ~[\r\n]*
         -> skip
+    ;
+
+JoinLines
+    : ' '* '\\' ' '* Newline
+       -> skip
     ;
 
