@@ -666,13 +666,6 @@ BlockComment
         -> skip
     ;
 
-//!WARNING! test extension, not C90 standard
-LineComment
-    :   '//' ~[\r\n]*
-        -> skip
-    ;
-
-
 Preprocessor
     :   '#' ~[\r\n]*
         -> skip
