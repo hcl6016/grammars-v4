@@ -14,5 +14,6 @@
 
 	<modules>
 		<module>C</module>
+		<module>C90</module>
 	</modules>
 </project>
