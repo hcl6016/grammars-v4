@@ -40,7 +40,7 @@
 					<showTree>false</showTree>
 					<entryPoint>compilationUnit</entryPoint>
 					<grammarName>C90</grammarName>
-					<packageName>c90</packageName>
+					<packageName></packageName>
 					<exampleFiles>examples/</exampleFiles>
 				</configuration>
 				<executions>

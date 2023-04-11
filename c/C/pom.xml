@@ -40,7 +40,7 @@
 					<showTree>false</showTree>
 					<entryPoint>compilationUnit</entryPoint>
 					<grammarName>C</grammarName>
-					<packageName>c</packageName>
+					<packageName></packageName>
 					<exampleFiles>examples/</exampleFiles>
 				</configuration>
 				<executions>
