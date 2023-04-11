@@ -64,7 +64,7 @@ functionSpecifier
 
 //if typeSpecifier not spedified : default return int
 functionDeclaration
-    :   '__extension__'? gccDeclaratorExtension1* storageFuncSpecifier* functionSpecifier? gccDeclaratorExtension1* typeSpecifier? gccDeclaratorExtension1* visualExtension Identifier function gccDeclaratorExtension2* ';'
+    :   '__extension__'? gccDeclaratorExtension1* storageFuncSpecifier* functionSpecifier? gccDeclaratorExtension1* typeSpecifier? gccDeclaratorExtension1* visualExtension? Identifier function gccDeclaratorExtension2* ';'
     ;
 
 functionDefinition
