@@ -30,7 +30,7 @@
 grammar C90;
 
 compilationUnit
-    :   externalDeclaration+ EOF
+    :   externalDeclaration* EOF
     ;
 
 externalDeclaration
