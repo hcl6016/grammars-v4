@@ -162,7 +162,7 @@ compoundStatement
 
 blockItem
     :   variableDeclaration
-    |   typeDeclaration
+    |   typeDeclaration ';'
     |   typeDefinition
     |   statement
     |   label
