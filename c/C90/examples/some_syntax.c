@@ -133,7 +133,8 @@ int main() {
         case 1: break;
         default:c=2;
     }
-    int a, b = c= 2, *p = NULL;
+/*can't be b=c=2 in intializer*/
+    int a, b = c, *p = NULL;
     int n = a<b? a: a<b?b:a;
     goto lab;
     for (a>2; b>2,a<b; c=2) {}

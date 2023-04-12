@@ -172,7 +172,18 @@ variableList
     ;
 
 variableDeclarator
-    : fieldDeclarator ( '=' assignmentExpression )?
+    : fieldDeclarator ('=' initializer)?
+    ;
+
+initializer
+    :  conditionalExpression
+    | '{' '}'
+    | '{' fieldInitializer (',' fieldInitializer)* '}'
+    ;
+
+fieldInitializer
+    : initializer
+    | '.' Identifier '=' initializer
     ;
 
 variableName
