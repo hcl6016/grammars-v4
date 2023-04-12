@@ -52,6 +52,7 @@ storageFuncSpecifier
 
 storageVarSpecifier
     :   'register'
+    |   'static'
     ;
 
 
@@ -111,6 +112,8 @@ type
 
 typeName
     : 'int'
+    | 'int' 'long'
+    | ('unsigned'|'signed') 'int'?
     | ('unsigned'|'signed')? 'long' 'int'?
     | '__extension__'? ('unsigned'|'signed')? 'long' 'long' 'int'?
     | 'long'? ('unsigned'|'signed') 'int'?
