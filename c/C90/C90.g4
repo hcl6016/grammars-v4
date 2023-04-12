@@ -166,7 +166,7 @@ label
     ;
 
 variableDeclaration
-    : type variableList ';' //typeName can't be void without modifiers
+    : '__extension__'? alignas? type variableList ';' //typeName can't be void without modifiers
     ;
 
 variableList
@@ -208,8 +208,12 @@ variablePlace
 
 
 fieldDeclaration
-    : '__extension__'? type fieldList? //typeName can't be void without modifiers
+    : '__extension__'? alignas? type fieldList? //typeName can't be void without modifiers
     | type bitField //anonymous field
+    ;
+
+alignas
+    : '_Alignas' '(' conditionalExpression ')'
     ;
 
 fieldList
@@ -381,6 +385,8 @@ unaryExpression
     |   unaryOperator castExpression
     |   'sizeof' '(' type modifiersWithoutVariable ')'
     |   'sizeof' '(' conditionalExpression ')'
+    |   '_Alignof' '(' type modifiersWithoutVariable ')'
+    |   '_Alignof' '(' conditionalExpression ')'
     ;
 
 modifiersWithoutVariable
