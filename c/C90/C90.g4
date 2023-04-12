@@ -394,7 +394,7 @@ unaryExpression
     |   'sizeof' '(' conditionalExpression ')'
     |   '_Alignof' '(' type modifiersWithoutVariable ')'
     |   '_Alignof' '(' conditionalExpression ')'
-    |   '__builtin_offsetof' '(' type ',' Identifier ')'
+    |   '__builtin_offsetof' '(' type ',' postfixExpression ')'
     ;
 
 modifiersWithoutVariable

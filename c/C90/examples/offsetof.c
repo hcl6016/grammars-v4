@@ -19,6 +19,8 @@ int main(void)
     struct Struct1 var;
     int ret = __builtin_offsetof (struct Struct1,c);
     printf("%d\n",ret);
+    int ret = __builtin_offsetof (struct Struct1,c[2]);
+    printf("%d\n",ret);
     ret = __builtin_offsetof (struct aa{int a,c},c);
     printf("%d\n",ret);
 }
