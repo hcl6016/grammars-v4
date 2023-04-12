@@ -74,6 +74,7 @@ function
     | visualExtension function
     | gccDeclaratorExtension1 function
     | typeModifier function
+    | function arrayOneDim
     ;
 
 
