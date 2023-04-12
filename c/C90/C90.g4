@@ -192,9 +192,15 @@ arrayInitializer
     : '{' conditionalExpression (',' conditionalExpression)* '}'
     ;
 
+surroundedVariableName
+    : '(' surroundedVariableName ')'
+    | typeModifier surroundedVariableName
+    |  '(' variableName ')'
+    ;
+
 variableName
-    : '(' variableName ')'
-    | typeModifier variableName
+    : typeModifier variableName
+    | variableName arrayOneDim
     | Identifier
     ;
 
@@ -221,7 +227,8 @@ fieldList
     ;
 
 fieldDeclarator
-    : typeModifier* typeQualifier* variableName (bitField | array | functionParameters)? gccAttributeSpecifier?
+    : typeModifier* typeQualifier* (variableName | surroundedVariableName) (bitField | array)? gccAttributeSpecifier?
+    | typeModifier* typeQualifier* surroundedVariableName functionParameters gccAttributeSpecifier?
     ;
 
 functionParameters
@@ -435,6 +442,7 @@ argumentList
 
 typeDefinition
     : '__extension__'? 'typedef' typeQualifier* type fieldDeclarator gccAttributeSpecifier? ';'
+    | '__extension__'? 'typedef' typeQualifier* type? function gccAttributeSpecifier? ';'
     ;
 
 visualExtension
