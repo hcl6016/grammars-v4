@@ -372,6 +372,7 @@ unaryExpression
     |   '--' unaryExpression
     |   unaryOperator castExpression
     |   'sizeof' '(' type typeModifier* ')'
+    |   'sizeof' '(' conditionalExpression ')'
     ;
 
 
