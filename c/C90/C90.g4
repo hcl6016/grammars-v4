@@ -41,6 +41,7 @@ externalDeclaration
     |   typeDeclaration ';'
     |   typeDefinition
     |   typeWillBeDeclared
+    |   ';'
     ;
 
 storageFuncSpecifier
@@ -157,6 +158,7 @@ blockItem
     |   typeDefinition
     |   statement
     |   label
+    |   ';'
     ;
 
 label
