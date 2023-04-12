@@ -36,7 +36,7 @@ compilationUnit
 externalDeclaration
     :   functionDefinition
     |   functionDefinitionKandR
-    |   functionDeclaration
+    |   functionDeclaration ';'
     |   'extern'? variableDeclaration
     |   typeDeclaration ';'
     |   typeDefinition
@@ -64,19 +64,19 @@ functionSpecifier
 
 //if typeSpecifier not spedified : default return int
 functionDeclaration
-    :   '__extension__'? gccDeclaratorExtension1* storageFuncSpecifier* functionSpecifier? gccDeclaratorExtension1* typeSpecifier? gccDeclaratorExtension1* visualExtension? Identifier function gccDeclaratorExtension2* ';'
+    :   '__extension__'? gccDeclaratorExtension1* storageFuncSpecifier* functionSpecifier? gccDeclaratorExtension1* typeSpecifier? gccDeclaratorExtension1* visualExtension? Identifier function gccDeclaratorExtension2*
     ;
 
 functionDefinition
-    :   '__extension__'? gccDeclaratorExtension1* storageFuncSpecifier* functionSpecifier? gccDeclaratorExtension1* typeSpecifier? gccDeclaratorExtension1* Identifier '(' parameterList ')' compoundStatement
+    :   functionDeclaration compoundStatement
     ;
 
 functionDefinitionKandR
-    :   typeSpecifier Identifier '(' varList? ')' (typeSpecifier Identifier ';')* compoundStatement
+    :   typeSpecifier Identifier '(' varListKandR? ')' (typeSpecifier Identifier ';')* compoundStatement
     ;
 
-varList
-    : variableName (',' variableName)*
+varListKandR
+    : Identifier (',' Identifier)*
     ;
 
 typeQualifier
@@ -126,17 +126,6 @@ typeModifier
     : '*'
     ;
 
-fixedParameterList
-    : parameter (',' parameter)*
-    ;
-
-parameterList
-    : fixedParameterList
-    | fixedParameterList ',' '...'
-    | 'void'
-    | /*empty*/
-    ;
-
 fixedParameterOrTypeList
     : parameterOrType (',' parameterOrType)*
     ;
@@ -144,10 +133,6 @@ fixedParameterOrTypeList
 parameterOrTypeList
     : fixedParameterOrTypeList
     | fixedParameterOrTypeList ',' '...'
-    ;
-
-parameter
-    : typeSpecifier variableName (array | function)? gccAttributeSpecifier?
     ;
 
 parameterOrType
