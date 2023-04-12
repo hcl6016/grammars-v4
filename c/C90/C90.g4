@@ -186,6 +186,10 @@ fieldInitializer
     | '.' Identifier '=' initializer
     ;
 
+arrayInitializer
+    : '{' conditionalExpression (',' conditionalExpression)* '}'
+    ;
+
 variableName
     : '(' variableName ')'
     | typeModifier variableName
@@ -360,7 +364,8 @@ multiplicativeExpression
 
 castExpression
     :   unaryExpression
-    |   '(' type typeModifier* ')' castExpression
+    |   '(' type modifiersWithoutVariable ')' castExpression
+    |   '(' type modifiersWithoutVariable ')' arrayInitializer
     ;
 
 unaryOperator
