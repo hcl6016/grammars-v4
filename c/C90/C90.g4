@@ -65,8 +65,17 @@ functionSpecifier
 //if type not spedified : default return int
 functionDeclaration
     :   '__extension__'? gccDeclaratorExtension1* storageFuncSpecifier* functionSpecifier? gccDeclaratorExtension1*
-        (type typeModifier*)? gccDeclaratorExtension1* visualExtension? Identifier function gccDeclaratorExtension2*
+            type? function gccDeclaratorExtension2*
     ;
+
+function
+    : Identifier functionParameters
+    | '(' function ')'
+    | visualExtension function
+    | gccDeclaratorExtension1 function
+    | typeModifier function
+    ;
+
 
 functionDefinition
     :   functionDeclaration compoundStatement
@@ -132,7 +141,7 @@ parameterOrTypeList
     ;
 
 parameterOrType
-    : type variablePlace (array | function)? gccAttributeSpecifier?
+    : type variablePlace (array | functionParameters)? gccAttributeSpecifier?
     ;
 
 
@@ -190,10 +199,10 @@ fieldList
     ;
 
 fieldDeclarator
-    : typeModifier* typeQualifier* variableName (bitField | array | function)? gccAttributeSpecifier?
+    : typeModifier* typeQualifier* variableName (bitField | array | functionParameters)? gccAttributeSpecifier?
     ;
 
-function
+functionParameters
     : '(' parameterOrTypeList? ')'
     ;
 
