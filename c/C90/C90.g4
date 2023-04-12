@@ -263,7 +263,8 @@ switchStatement
     ;
 
 caseLabel
-    : 'case' constant ':' statement*
+    : 'case' literal ':' statement*
+    | 'case' Identifier ':' statement*
     ;
 
 defaultLabel
@@ -394,13 +395,13 @@ argumentExpressionList
 
 primaryExpression
     :   Identifier
-    |   constant
+    |   literal
     |   StringLiteral+
     |   '('commaExpression ')'
     ;
 
 
-constant
+literal
     :   integerConstant
     |   FloatingConstant
     |   CharacterConstant
