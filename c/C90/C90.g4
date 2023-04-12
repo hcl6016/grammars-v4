@@ -62,9 +62,10 @@ functionSpecifier
     :  '__inline'
     ;
 
-//if typeSpecifier not spedified : default return int
+//if type not spedified : default return int
 functionDeclaration
-    :   '__extension__'? gccDeclaratorExtension1* storageFuncSpecifier* functionSpecifier? gccDeclaratorExtension1* typeSpecifier? gccDeclaratorExtension1* visualExtension? Identifier function gccDeclaratorExtension2*
+    :   '__extension__'? gccDeclaratorExtension1* storageFuncSpecifier* functionSpecifier? gccDeclaratorExtension1*
+        (type typeModifier*)? gccDeclaratorExtension1* visualExtension? Identifier function gccDeclaratorExtension2*
     ;
 
 functionDefinition
@@ -72,7 +73,7 @@ functionDefinition
     ;
 
 functionDefinitionKandR
-    :   typeSpecifier Identifier '(' varListKandR? ')' (typeSpecifier Identifier ';')* compoundStatement
+    :   type typeModifier* Identifier '(' varListKandR? ')' (type typeModifier* Identifier ';')* compoundStatement
     ;
 
 varListKandR
@@ -92,14 +93,9 @@ typeDeclaration
     | enumDeclaration
     ;
 
-typeSpecifier
-    :   (storageVarSpecifier | typeQualifier)* typeName typeModifier* typeQualifier*
-    ;
-
 type
-    : typeName
-    | typeQualifier typeName
-    | typeDeclaration
+    : storageVarSpecifier* typeQualifier* typeName
+    | storageVarSpecifier* typeQualifier* typeDeclaration
     ;
 
 typeName
@@ -136,7 +132,7 @@ parameterOrTypeList
     ;
 
 parameterOrType
-    : typeSpecifier variablePlace (array | function)? gccAttributeSpecifier?
+    : type variablePlace (array | function)? gccAttributeSpecifier?
     ;
 
 
@@ -342,7 +338,7 @@ multiplicativeExpression
 
 castExpression
     :   unaryExpression
-    |   '(' typeSpecifier ')' castExpression
+    |   '(' type typeModifier* ')' castExpression
     ;
 
 unaryOperator
@@ -354,7 +350,7 @@ unaryExpression
     |   '++' unaryExpression
     |   '--' unaryExpression
     |   unaryOperator castExpression
-    |   'sizeof' '(' typeSpecifier ')'
+    |   'sizeof' '(' type typeModifier* ')'
     ;
 
 
