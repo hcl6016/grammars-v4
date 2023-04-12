@@ -216,7 +216,7 @@ arrayOneDim
     ;
 
 bitField
-    : ':' integerConstant
+    : ':' conditionalExpression
     ;
 
 fieldName
