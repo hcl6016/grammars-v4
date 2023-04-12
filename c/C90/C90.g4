@@ -372,9 +372,17 @@ unaryExpression
     |   '++' unaryExpression
     |   '--' unaryExpression
     |   unaryOperator castExpression
-    |   'sizeof' '(' type typeModifier* ')'
+    |   'sizeof' '(' type modifiersWithoutVariable ')'
     |   'sizeof' '(' conditionalExpression ')'
     ;
+
+modifiersWithoutVariable
+    : '(' modifiersWithoutVariable ')'
+    | typeModifier modifiersWithoutVariable
+    | modifiersWithoutVariable arrayOneDim
+    |
+    ;
+
 
 
 postfixExpression
