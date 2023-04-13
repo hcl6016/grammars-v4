@@ -113,14 +113,14 @@ type
 typeName
     : 'int'
     | 'int' 'long'
-    | ('unsigned'|'signed') 'int'?
-    | ('unsigned'|'signed')? 'long' 'int'?
-    | '__extension__'? ('unsigned'|'signed')? 'long' 'long' 'int'?
-    | 'long'? ('unsigned'|'signed') 'int'?
+    | unsignedOrSigned 'int'?
+    | unsignedOrSigned? 'long' 'int'?
+    | '__extension__'? unsignedOrSigned? 'long' 'long' 'int'?
+    | 'long'? unsignedOrSigned 'int'?
     | 'short'
-    | ('unsigned'|'signed')? 'short' 'int'?
-    | 'short'? ('unsigned'|'signed') 'int'?
-    | ('unsigned'|'signed')? 'char'
+    | unsignedOrSigned? 'short' 'int'?
+    | 'short'? unsignedOrSigned 'int'?
+    | unsignedOrSigned? 'char'
     | 'float'
     | 'long'? 'double'
     | 'float' '_Complex'
@@ -132,6 +132,11 @@ typeName
     | Identifier
     ;
 
+unsignedOrSigned
+    : 'unsigned'
+    | 'signed'
+    ;
+
 typeModifier
     : '*'
     ;
@@ -141,12 +146,11 @@ fixedParameterOrTypeList
     ;
 
 parameterOrTypeList
-    : fixedParameterOrTypeList
-    | fixedParameterOrTypeList ',' '...'
+    : fixedParameterOrTypeList (',' '...')?
     ;
 
 parameterOrType
-    : type variablePlace (array | functionParameters)? gccAttributeSpecifier?
+    : type variablePlace? (array | functionParameters)? gccAttributeSpecifier?
     ;
 
 
@@ -208,11 +212,9 @@ variableName
     ;
 
 variablePlace
-    : '(' variablePlace ')'
-    | typeModifier variablePlace
-    | typeQualifier variablePlace
+     : '(' variablePlace? ')'
+    | (typeModifier | typeQualifier) variablePlace?
     | Identifier
-    |
     ;
 
 
@@ -380,8 +382,7 @@ multiplicativeExpression
 
 castExpression
     :   unaryExpression
-    |   '(' type modifiersWithoutVariable ')' castExpression
-    |   '(' type modifiersWithoutVariable ')' arrayInitializer
+    |   '(' type modifiersWithoutVariable ')' (castExpression | arrayInitializer)
     ;
 
 unaryOperator
@@ -393,20 +394,22 @@ unaryExpression
     |   '++' unaryExpression
     |   '--' unaryExpression
     |   unaryOperator castExpression
-    |   'sizeof' '(' type modifiersWithoutVariable ')'
-    |   'sizeof' '(' conditionalExpression ')'
-    |   '_Alignof' '(' type modifiersWithoutVariable ')'
-    |   '_Alignof' '(' conditionalExpression ')'
+    |   sizeofOrAlignof '(' type modifiersWithoutVariable ')'
+    |   sizeofOrAlignof '(' conditionalExpression ')'
     |   '__builtin_offsetof' '(' type ',' postfixExpression ')'
     ;
 
-modifiersWithoutVariable
-    : '(' modifiersWithoutVariable ')'
-    | typeModifier modifiersWithoutVariable
-    | modifiersWithoutVariable arrayOneDim
-    |
+sizeofOrAlignof
+    :   'sizeof'
+    |   '_Alignof'
     ;
 
+modifiersWithoutVariable
+    : '(' modifiersWithoutVariable')'
+    | typeModifier modifiersWithoutVariable
+    | modifiersWithoutVariable arrayOneDim
+    | /*empty*/
+    ;
 
 
 postfixExpression
@@ -454,9 +457,7 @@ visualExtension
     ;
 
 gccDeclaratorExtension1  //__attribute__ ((visibility ("default"))) or ((__always_inline__))
-    : '__attribute__' '(' '(' Identifier ')' ')'
-    | '__attribute__' '(' '(' Identifier '(' integerConstant ')' ')' ')'
-    | '__attribute__' '(' '(' Identifier '(' StringLiteral ')' ')' ')'
+    : '__attribute__' '(' '(' Identifier ('(' (StringLiteral | integerConstant) ')')? ')' ')'
     ;
 
 gccDeclaratorExtension2
@@ -474,11 +475,8 @@ gccAttributeList
     ;
 
 gccAttribute
-    : Identifier
+    : Identifier ('(' (StringLiteral | (Identifier | integerConstant) ( ',' integerConstant )*) ')')?
     | 'const'
-    | Identifier '(' StringLiteral ')'
-    | Identifier '(' Identifier ( ',' integerConstant )* ')'
-    | Identifier '(' integerConstant ( ',' integerConstant )* ')'
     ;
 
 enumDeclaration
@@ -490,8 +488,7 @@ enumList
     ;
 
 enumItem
-    : Identifier
-    | Identifier '=' inclusiveOrExpression
+    : Identifier ('=' inclusiveOrExpression)?
     ;
 
 Identifier
@@ -529,16 +526,13 @@ sign
     ;
 
 DecimalConstant
-    :   NonzeroDigit Digit* IntegerSuffix?
-    |   '0' IntegerSuffix?
+    :   (NonzeroDigit Digit* | '0') IntegerSuffix?
     ;
 
 fragment
 IntegerSuffix
-    :   UnsignedSuffix LongSuffix?
-    |   UnsignedSuffix LongLongSuffix
-    |   LongSuffix UnsignedSuffix?
-    |   LongLongSuffix UnsignedSuffix?
+    :   UnsignedSuffix (LongSuffix | LongLongSuffix)?
+    |   (LongSuffix | LongLongSuffix) UnsignedSuffix?
     ;
 
 fragment
@@ -606,8 +600,7 @@ FloatingConstant
 
 fragment
 DecimalFloatingConstant
-    :   FractionalConstant ExponentPart? FloatingSuffix?
-    |   DigitSequence ExponentPart FloatingSuffix?
+    :   (FractionalConstant ExponentPart? | DigitSequence ExponentPart) FloatingSuffix?
     ;
 
 fragment
@@ -617,8 +610,7 @@ DigitSequence
 
 fragment
 ExponentPart
-    :   'e' Sign? DigitSequence
-    |   'E' Sign? DigitSequence
+    :   [eE] Sign? DigitSequence
     ;
 
 fragment
@@ -639,7 +631,7 @@ StringLiteralMulti
     ;
 
 StringLiteral
-    :   ('L')? (StringLiteralOne|StringLiteralMulti) //L"abc" - elements are ints
+    :   'L'? (StringLiteralOne | StringLiteralMulti) //L"abc" - elements are ints
     ;
 
 fragment
@@ -673,37 +665,33 @@ SimpleEscapeSequence
 
 fragment
 OctalEscapeSequence
-    :   '\\' OctalDigit
-    |   '\\' OctalDigit OctalDigit
-    |   '\\' OctalDigit OctalDigit OctalDigit
+    :   '\\' OctalDigit (OctalDigit OctalDigit?)?
     ;
 
 fragment
 HexadecimalEscapeSequence
-    :   '\\x' HexadecimalDigit
-    |   '\\x' HexadecimalDigit HexadecimalDigit
+    :   '\\x' HexadecimalDigit HexadecimalDigit?
     ;
 
 
 Whitespace
     :   [ \t]+
-        -> skip
+        -> channel(HIDDEN)
     ;
-
 
 Newline
     :   (   '\r' '\n'?
         |   '\n'
         )
-        -> skip
+        -> channel(HIDDEN)
     ;
 
 BlockComment
     :   '/*' .*? '*/'
-        -> skip
+        -> channel(HIDDEN)
     ;
 
 Preprocessor
     :   '#' ~[\r\n]*
-        -> skip
+        -> channel(HIDDEN)
     ;
