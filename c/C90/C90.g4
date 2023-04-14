@@ -77,7 +77,8 @@ function
     | visualExtension function
     | gccDeclaratorExtension1 function
     | typeModifier function
-    | function arrayOneDim
+    | function arrayOneDim //returns pointer to array
+    | function functionParameters //returns pointer to function
     ;
 
 
