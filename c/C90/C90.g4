@@ -53,6 +53,7 @@ storageFuncSpecifier
 storageVarSpecifier
     :   'register'
     |   'static'
+    |   '_Thread_local'
     ;
 
 
