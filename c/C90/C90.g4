@@ -219,9 +219,8 @@ variablePlace
     ;
 
 
-fieldDeclaration
-    : '__extension__'? alignas? type fieldList? //typeName can't be void without modifiers
-    | type bitField //anonymous field
+fieldDeclaration //typeName can't be void without modifiers ; bitField: anonymous field
+    : '__extension__'? alignas? type (fieldList|bitField)?
     ;
 
 alignas
