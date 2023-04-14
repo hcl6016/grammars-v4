@@ -1,3 +1,5 @@
+typedef struct MyType_t{int a,b;} MyType;
+typedef struct MyStruct_t{int a,b;} MyStruct;
 /*function pointer*/
 typedef
 void *

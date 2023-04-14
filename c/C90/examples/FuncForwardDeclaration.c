@@ -5,7 +5,7 @@ And func forward declarations.
 
 void aX(void);
 int a1(int param1);
-int a2(int param1, param2);
+int a2(int param1, int);
 void a3();
 void a3(void);
 

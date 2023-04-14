@@ -1,6 +1,7 @@
+#include <stdio.h>
+#include <stdlib.h>
 /* dirty fragments of syntax */
 
-int ttt(const void * (* )(va_list *));
 unsigned long long int * const sssa,cccc;
 
 typedef enum a{a,b,c=3} newtype4;
@@ -35,7 +36,7 @@ typedef struct __gconv_info
 {
     int;
 
-    size_t __nsteps;
+    long __nsteps;
     struct __gconv_step *__steps;
     struct __gconv_step_data __data[0];
 } *__gconv_t;

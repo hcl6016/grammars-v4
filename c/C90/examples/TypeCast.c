@@ -1,3 +1,10 @@
+typedef char CustomType;
+int a1,a5;
+CustomType a2;
+CustomType *a3;
+CustomType **a4;
+int b1,b2,b3,b4;
+int b5(){};
 f()
 {
 	a1 = (int)(b1);

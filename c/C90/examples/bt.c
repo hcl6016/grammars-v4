@@ -1,3 +1,4 @@
+#include <stdlib.h>
 struct tree_el {
    int val;
    struct tree_el * right, * left;

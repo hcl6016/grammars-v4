@@ -1,3 +1,9 @@
+#ifndef _MSC_VER
+#define __cdecl
+#endif
+typedef unsigned int UINTN;
+typedef struct MyStruct_t {int a,b;} MyStruct;
+
 /*function returns pointer*/
 void *
 __cdecl

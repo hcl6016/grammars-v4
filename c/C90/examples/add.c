@@ -1,6 +1,8 @@
+#include <stdio.h>
+
     int main()
     {
-        int i, sum = 0;
+        int i, sum = 0,LAST = 10;
        
         for ( i = 1; i <= LAST; i++ ) {
           sum += i;

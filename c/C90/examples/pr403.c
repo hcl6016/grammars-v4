@@ -1,6 +1,6 @@
 
 /* Hello World program */
-
+char *program_name = "program";
 main()
 {
       printf (_("\

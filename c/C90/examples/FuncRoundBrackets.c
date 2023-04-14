@@ -29,12 +29,9 @@ int (*(*attrFun3 (int, int))) __attribute__ ((__nothrow__ , __leaf__)) __attribu
 
 extern __attribute__((noreturn)) void (voidFunc(int ));
 
-int attrFun4 (int n) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1))) {
-}
+int attrFun4 (int n) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 
-int (attrFun4a (int n)) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1))) {
-}
-
+int (attrFun4a (int n)) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1)));
 char (*func3 (int, int)) {
     return  "func3";
 }
