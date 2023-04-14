@@ -245,8 +245,8 @@ array
     : arrayOneDim+
     ;
 
-arrayOneDim
-    : '[' typeQualifier* conditionalExpression? ']'
+arrayOneDim // [*] can be in function prototype declaration
+    : '[' typeQualifier* (conditionalExpression | '*')? ']'
     ;
 
 bitField
