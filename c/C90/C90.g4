@@ -472,7 +472,6 @@ gccAttributeSpecifier
 
 gccAttributeList
     :   gccAttribute (',' gccAttribute)*
-//    |   // empty
     ;
 
 gccAttribute
