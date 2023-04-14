@@ -1,0 +1,1 @@
+char *s = "\xff\xff\xee\u2EF0";

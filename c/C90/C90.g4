@@ -660,6 +660,7 @@ EscapeSequence
     :   SimpleEscapeSequence
     |   OctalEscapeSequence
     |   HexadecimalEscapeSequence
+    |   UnicodeEscapeSequence
     ;
 
 
@@ -678,6 +679,16 @@ HexadecimalEscapeSequence
     :   '\\x' HexadecimalDigit HexadecimalDigit?
     ;
 
+fragment
+UnicodeEscapeSequence
+    :   '\\u' HexQuad
+    |   '\\U' HexQuad HexQuad
+    ;
+
+fragment
+HexQuad
+    :   HexadecimalDigit HexadecimalDigit HexadecimalDigit HexadecimalDigit
+    ;
 
 Whitespace
     :   [ \t]+
