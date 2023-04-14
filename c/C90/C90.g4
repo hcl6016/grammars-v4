@@ -645,7 +645,7 @@ SChar
     ;
 
 CharacterConstant
-    :   '\'' CChar '\''
+    :  'L'? '\'' CChar '\''
     ;
 
 fragment
