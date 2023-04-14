@@ -220,7 +220,7 @@ variablePlace
 
 
 fieldDeclaration //typeName can't be void without modifiers ; bitField: anonymous field
-    : '__extension__'? alignas? type (fieldList|bitField)?
+    : '__extension__'? alignas? type (fieldList|bitField)? gccDeclaratorExtension3?
     ;
 
 alignas
@@ -463,6 +463,11 @@ gccDeclaratorExtension1  //__attribute__ ((visibility ("default"))) or ((__alway
 gccDeclaratorExtension2
     :   '__asm__' '(' StringLiteral+ ')'
     |   gccAttributeSpecifier
+    ;
+
+//Identifier is usually __aligned__ but it is not keyword
+gccDeclaratorExtension3
+    : '__attribute__' '(' '(' Identifier'(' '__alignof__' '(' typeName ')' ')' ')' ')'
     ;
 
 gccAttributeSpecifier
