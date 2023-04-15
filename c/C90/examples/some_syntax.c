@@ -121,6 +121,10 @@ int *func3() {
 }
 
 int main() {
+    /* second expression can be omitted, then its value = 1 */
+    bool b = true;
+    int k = b ? : 2;
+
     int c = 22,d;
     printf("%d", sizeof (int));
     char *str= "\x1";

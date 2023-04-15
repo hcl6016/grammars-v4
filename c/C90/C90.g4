@@ -357,7 +357,7 @@ assignmentExpression
     ;
 
 conditionalExpression
-    :   logicalOrExpression ('?' commaExpression ':' conditionalExpression)?
+    :   logicalOrExpression ('?' commaExpression? ':' conditionalExpression)?
     ;
 
 logicalOrExpression
