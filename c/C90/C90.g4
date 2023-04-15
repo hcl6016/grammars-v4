@@ -36,8 +36,7 @@ compilationUnit
 declaration
     :   functionDefinition
     |   functionDefinitionKandR
-    |   functionMultiDeclaration
-    |   'extern'? variableDeclaration
+    |   varFuncDeclaration
     |   typeDeclaration ';'
     |   typeDefinition
     |   typeWillBeDeclared
@@ -66,7 +65,7 @@ functionSpecifier
     ;
 
 //if type not spedified : default return int
-functionRetType
+externalType
     :   '__extension__'? gccAttributeSpecifierFuncs* storageFuncSpecifier* functionSpecifier?
         gccAttributeSpecifierFuncs* type?
     ;
@@ -85,16 +84,12 @@ function
     | function functionParameters //returns pointer to function
     ;
 
-functionMultiDeclaration
-    :   functionRetType functionExt (',' functionExt)* ';'
-    ;
-
 functionDefinition
-    :   functionRetType functionExt compoundStatement
+    :   externalType functionExt compoundStatement
     ;
 
 functionDefinitionKandR
-    :   functionRetType typeModifier* Identifier '(' varListKandR? ')'
+    :   externalType typeModifier* Identifier '(' varListKandR? ')'
             parametersKandRlist? compoundStatement
     ;
 
@@ -185,16 +180,17 @@ label
     : Identifier ':'
     ;
 
-variableDeclaration
-    : '__extension__'? gccAttributeOrAlignas* type variableList ';' //typeName can't be void without modifiers
+varFuncDeclaration
+    : 'extern'? '__extension__'? gccAttributeOrAlignas* externalType varFuncList ';' //typeName can't be void without modifiers
     ;
 
-variableList
-    : variableDeclarator (',' variableDeclarator)*
+varFuncList
+    : varFuncDeclarator (',' varFuncDeclarator)*
     ;
 
-variableDeclarator
-    : fieldDeclarator ('=' initializer)?
+varFuncDeclarator
+    :   fieldDeclarator ('=' initializer)?
+    |   functionExt
     ;
 
 structInitializer
