@@ -411,7 +411,7 @@ multiplicativeExpression
 
 castExpression
     :   unaryExpression
-    |   '(' typeSpecifier ')' (castExpression | arrayInitializer)
+    |   '(' typeSpecifier ')' (castExpression | arrayInitializer | initializer)
     ;
 
 unaryOperator
