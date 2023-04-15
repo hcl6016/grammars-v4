@@ -67,7 +67,7 @@ functionSpecifier
 //if type not spedified : default return int
 externalType
     :   '__extension__'? gccAttributeSpecifierFuncs* storageFuncSpecifier* functionSpecifier?
-        gccAttributeSpecifierFuncs* type?
+        gccAttributeSpecifierFuncs* type
     ;
 
 functionExt
@@ -85,11 +85,11 @@ function
     ;
 
 functionDefinition
-    :   externalType functionExt compoundStatement
+    :   externalType? functionExt compoundStatement
     ;
 
 functionDefinitionKandR
-    :   externalType typeModifier* Identifier '(' varListKandR? ')'
+    :   externalType? typeModifier* Identifier '(' varListKandR? ')'
             parametersKandRlist? compoundStatement
     ;
 
@@ -115,6 +115,10 @@ type
     | storageVarSpecifier* typeQualifier* typeDeclaration
     ;
 
+complex
+    :   '_Complex' | '__complex__'
+    ;
+
 typeName
     : 'int'
     | 'int' 'long'
@@ -128,10 +132,10 @@ typeName
     | unsignedOrSigned? 'char'
     | 'float'
     | 'long'? 'double'
-    | 'float'? '_Complex'
-    | 'long'? 'double' '_Complex'
-    | '_Complex' 'float'
-    | '_Complex' 'long'? 'double'
+    | 'float'? complex
+    | 'long'? 'double' complex
+    | complex 'float'
+    | complex 'long'? 'double'
     | 'void'
     | ('struct'|'union') Identifier
     | 'enum' Identifier
@@ -181,7 +185,7 @@ label
     ;
 
 varFuncDeclaration
-    : 'extern'? '__extension__'? gccAttributeOrAlignas* externalType varFuncList ';' //typeName can't be void without modifiers
+    : 'extern'? '__extension__'? gccAttributeOrAlignas* externalType? varFuncList ';' //typeName can't be void without modifiers
     ;
 
 varFuncList
@@ -448,7 +452,7 @@ modifiersWithoutVariable
     ;
 
 typeSpecifier
-    : type modifiersWithoutVariable
+    :   type modifiersWithoutVariable
     ;
 
 postfixExpression
