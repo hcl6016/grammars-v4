@@ -324,7 +324,7 @@ switchStatement
 
 caseLabel
     : 'case' literal ':' statement*
-    | 'case' Identifier ':' statement*
+    | 'case' conditionalExpression ':' statement*
     ;
 
 defaultLabel
