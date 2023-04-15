@@ -94,8 +94,8 @@ functionDefinition
     ;
 
 functionDefinitionKandR
-    :   type typeModifier* Identifier '(' varListKandR? ')' gccDeclaratorExtension2?
-        (type variable (array | functionParameters)? ';')* compoundStatement
+    :   functionRetType typeModifier* Identifier '(' varListKandR? ')' gccDeclaratorExtension2?
+            variableDeclaration* compoundStatement
     ;
 
 varListKandR
@@ -234,7 +234,7 @@ variablePlace
     ;
 
 fieldDeclaration //typeName can't be void without modifiers ; bitField: anonymous field
-    : '__extension__'? alignas? type (fieldList|bitField)? gccAttributeSpecifierFields?
+    : '__extension__'? alignas? type (fieldList | bitField)? gccAttributeSpecifierFields?
     ;
 
 alignas
