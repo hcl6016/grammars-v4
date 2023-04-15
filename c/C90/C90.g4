@@ -194,7 +194,7 @@ variableDeclarator
     ;
 
 structInitializer
-    : '{' (fieldInitializer (',' fieldInitializer)*)? '}'
+    : '{' (fieldInitializer (',' fieldInitializer)* ','? )? '}'
     ;
 
 initializer
