@@ -280,6 +280,7 @@ statement
     |   ifStatement
     |   switchStatement
     |   'goto' Identifier ';'
+    |   'goto' '*' unaryExpression
     |   'return' commaExpression? ';'
     |   'continue' ';'
     |   'break' ';'
@@ -290,7 +291,7 @@ ifStatement
     ;
 
 switchStatement
-    : 'switch' '(' commaExpression ')' '{' caseLabel* defaultLabel? '}'
+    : 'switch' '(' commaExpression ')' '{' (caseLabel | label)* defaultLabel? '}'
     ;
 
 caseLabel
@@ -402,6 +403,7 @@ unaryExpression
     :   postfixExpression
     |   '++' unaryExpression
     |   '--' unaryExpression
+    |   '&&' Identifier
     |   unaryOperator castExpression
     |   sizeofOrAlignof '(' typeSpecifier ')'
     |   sizeofOrAlignof '(' conditionalExpression ')'
