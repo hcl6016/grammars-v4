@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 int bar2(int *([]));
 
 int bar2(int *(param[])) {
@@ -32,5 +34,5 @@ int main(int argc, char **argv)
     printf("sizeof=%d",sizeof(int *[2]));
     printf("sizeof=%d",sizeof(int *([2])));
     printf("sizeof=%d",sizeof(int (*)[]));
-    printf("sizeof=%d",sizeof(int (*)([])));
+    /*printf("sizeof=%d",sizeof(int (*)([]))); compile error */
 }

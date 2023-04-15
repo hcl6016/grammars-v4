@@ -95,7 +95,7 @@ functionDefinition
 
 functionDefinitionKandR
     :   functionRetType typeModifier* Identifier '(' varListKandR? ')' gccDeclaratorExtension2?
-            variableDeclaration* compoundStatement
+            parametersKandRlist? compoundStatement
     ;
 
 varListKandR
@@ -161,8 +161,20 @@ parameterOrTypeList
     : fixedParameterOrTypeList (',' '...')?
     ;
 
+parametersKandRlist
+    : (parametersKandR ';')+
+    ;
+
+parametersKandR
+    : gccAttributeOrAlignas? type parameterKandR (',' parameterKandR)*
+    ;
+
+parameterKandR
+    : typeModifier* typeQualifier* variable (array | functionParameters)? gccAttributeSpecifierFuncs?
+    ;
+
 parameterOrType
-    : type variablePlace (array | functionParameters)? gccAttributeSpecifierFuncs?
+    : gccAttributeOrAlignas? type variablePlace (array | functionParameters)? gccAttributeSpecifierFuncs?
     ;
 
 compoundStatement
@@ -438,15 +450,10 @@ sizeofOrAlignof
     |   '_Alignof'
     ;
 
-enclosedArray
-   : arrayOneDim
-   | '(' arrayOneDim')'
-   ;
-
 modifiersWithoutVariable
     : '(' modifiersWithoutVariable')'
     | (typeModifier | typeQualifier) modifiersWithoutVariable
-    | modifiersWithoutVariable enclosedArray
+    | modifiersWithoutVariable arrayOneDim
     | modifiersWithoutVariable functionParameters
     | /*empty*/
     ;

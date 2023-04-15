@@ -1,4 +1,5 @@
-main()
+#include <stdio.h>
+int main()
 {
     /* Define default values: */
 

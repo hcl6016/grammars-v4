@@ -1,9 +1,8 @@
-
+#include <stdio.h>
 /* Hello World program */
 
-main()
+int main()
 {
     printf("Hello World");
-
 }
 

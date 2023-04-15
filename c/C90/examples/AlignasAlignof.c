@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 struct sse_t
 {
     _Alignas(16)  float sse_data[4];
