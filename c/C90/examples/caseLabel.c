@@ -7,7 +7,7 @@ int main(int argc, char* argv) {
     {
         case 0:
         foo:
-        case 1: break;
+        case 1:;
     }
 
     enum Num {n0,n1,n2,n3,n4};

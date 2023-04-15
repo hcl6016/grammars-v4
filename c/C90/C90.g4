@@ -160,14 +160,12 @@ compoundStatement
     :   '{' blockItem* '}'
     ;
 
-
 blockItem
     :   variableDeclaration
     |   typeDeclaration ';'
     |   typeDefinition
     |   statement
     |   label
-    |   ';'
     ;
 
 label
@@ -284,6 +282,7 @@ statement
     |   'return' commaExpression? ';'
     |   'continue' ';'
     |   'break' ';'
+    |   ';'
     ;
 
 ifStatement
