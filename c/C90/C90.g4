@@ -391,7 +391,7 @@ multiplicativeExpression
 
 castExpression
     :   unaryExpression
-    |   '(' type modifiersWithoutVariable ')' (castExpression | arrayInitializer)
+    |   '(' typeSpecifier ')' (castExpression | arrayInitializer)
     ;
 
 unaryOperator
@@ -403,7 +403,7 @@ unaryExpression
     |   '++' unaryExpression
     |   '--' unaryExpression
     |   unaryOperator castExpression
-    |   sizeofOrAlignof '(' type modifiersWithoutVariable ')'
+    |   sizeofOrAlignof '(' typeSpecifier ')'
     |   sizeofOrAlignof '(' conditionalExpression ')'
     |   '__builtin_offsetof' '(' type ',' postfixExpression ')'
     ;
@@ -413,15 +413,22 @@ sizeofOrAlignof
     |   '_Alignof'
     ;
 
+enclosedArray
+   : arrayOneDim
+   | '(' arrayOneDim')'
+   ;
+
 modifiersWithoutVariable
     : '(' modifiersWithoutVariable')'
     | (typeModifier | typeQualifier) modifiersWithoutVariable
-    | modifiersWithoutVariable arrayOneDim
-    | modifiersWithoutVariable '(' arrayOneDim')'
+    | modifiersWithoutVariable enclosedArray
     | modifiersWithoutVariable functionParameters
     | /*empty*/
     ;
 
+typeSpecifier
+    : type modifiersWithoutVariable
+    ;
 
 postfixExpression
     :   primaryExpression
