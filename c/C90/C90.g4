@@ -264,11 +264,12 @@ fieldName
     ;
 
 structDeclaration
-        : '__extension__'? ('struct'|'union') Identifier? '{' fieldDeclarations '}' gccAttributeSpecifier?
+        : '__extension__'? ('struct'|'union') Identifier? '{' fieldDeclarations? '}' gccAttributeSpecifier?
         ;
 
 fieldDeclarations
-        : fieldDeclaration (';' fieldDeclaration)* ';'?
+        : fieldDeclaration (';' fieldDeclaration?)*
+        | ';'+
         ;
 
 statement
