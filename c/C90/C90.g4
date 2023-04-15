@@ -438,6 +438,7 @@ unaryExpression
     |   sizeofOrAlignof typeSpecifier
     |   sizeofOrAlignof conditionalExpression
     |   '__builtin_offsetof' '(' type ',' postfixExpression ')'
+    |  '__builtin_va_arg' '(' postfixExpression ',' type ')'
     ;
 
 sizeofOrAlignof
