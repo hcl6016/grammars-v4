@@ -418,6 +418,7 @@ modifiersWithoutVariable
     | (typeModifier | typeQualifier) modifiersWithoutVariable
     | modifiersWithoutVariable arrayOneDim
     | modifiersWithoutVariable '(' arrayOneDim')'
+    | modifiersWithoutVariable functionParameters
     | /*empty*/
     ;
 
