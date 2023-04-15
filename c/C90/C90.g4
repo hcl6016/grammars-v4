@@ -440,6 +440,7 @@ unaryExpression
 sizeofOrAlignof
     :   'sizeof'
     |   '_Alignof'
+    |   '__alignof__'
     ;
 
 modifiersWithoutVariable
