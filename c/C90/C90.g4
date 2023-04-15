@@ -153,7 +153,7 @@ parameterOrTypeList
     ;
 
 parameterOrType
-    : type variablePlace? (array | functionParameters)? gccAttributeSpecifier?
+    : type variablePlace (array | functionParameters)? gccAttributeSpecifier?
     ;
 
 compoundStatement
@@ -216,13 +216,16 @@ variableName
 variable
      : '(' variable ')'
     | (typeModifier | typeQualifier) variable
+    | variable arrayOneDim
     | Identifier
     ;
 
 variablePlace
-     : '(' variablePlace? ')'
-    | (typeModifier | typeQualifier) variablePlace?
+     : '(' variablePlace ')'
+    | (typeModifier | typeQualifier) variablePlace
+    | variablePlace arrayOneDim
     | Identifier
+    | /*empty*/
     ;
 
 fieldDeclaration //typeName can't be void without modifiers ; bitField: anonymous field
@@ -412,8 +415,9 @@ sizeofOrAlignof
 
 modifiersWithoutVariable
     : '(' modifiersWithoutVariable')'
-    | typeModifier modifiersWithoutVariable
+    | (typeModifier | typeQualifier) modifiersWithoutVariable
     | modifiersWithoutVariable arrayOneDim
+    | modifiersWithoutVariable '(' arrayOneDim')'
     | /*empty*/
     ;
 
