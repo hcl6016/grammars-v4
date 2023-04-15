@@ -111,8 +111,8 @@ typeDeclaration
     ;
 
 type
-    : storageVarSpecifier* typeQualifier* typeName
-    | storageVarSpecifier* typeQualifier* typeDeclaration
+    : storageVarSpecifier* typeQualifier* (typeName | typeDeclaration)
+    | storageVarSpecifier typeQualifier*
     ;
 
 complex
@@ -270,10 +270,6 @@ arrayOneDim // [*] can be in function prototype declaration
 
 bitField
     : ':' conditionalExpression
-    ;
-
-fieldName
-    : Identifier
     ;
 
 structDeclaration
@@ -489,13 +485,9 @@ literal
     ;
 
 
-argumentList
-    : assignmentExpression (',' assignmentExpression)*
-    ;
-
 typeDefinition
     : '__extension__'? 'typedef' typeQualifier* type fieldDeclarator gccAttributeSpecifierFuncs? ';'
-    | '__extension__'? 'typedef' typeQualifier* type? function gccAttributeSpecifierFuncs? ';'
+    | '__extension__'? 'typedef' typeQualifier* type function gccAttributeSpecifierFuncs? ';'
     ;
 
 visualExtension
