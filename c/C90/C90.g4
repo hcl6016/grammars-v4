@@ -126,7 +126,7 @@ typeName
     | unsignedOrSigned? 'char'
     | 'float'
     | 'long'? 'double'
-    | 'float' '_Complex'
+    | 'float'? '_Complex'
     | 'long'? 'double' '_Complex'
     | 'void'
     | ('struct'|'union') Identifier
