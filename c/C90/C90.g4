@@ -420,7 +420,7 @@ multiplicativeExpression
 
 castExpression
     :   unaryExpression
-    |   '(' typeSpecifier ')' (castExpression | arrayInitializer | structInitializer)
+    |   '(' gccAttributeOrAlignas? typeSpecifier ')' (castExpression | arrayInitializer | structInitializer)
     ;
 
 unaryOperator
