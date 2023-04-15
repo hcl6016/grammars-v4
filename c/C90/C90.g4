@@ -277,12 +277,26 @@ statement
     |   loopStatement
     |   ifStatement
     |   switchStatement
+    |   asmStatement
     |   'goto' Identifier ';'
-    |   'goto' '*' unaryExpression
+    |   'goto' '*' unaryExpression ';'
     |   'return' commaExpression? ';'
     |   'continue' ';'
     |   'break' ';'
     |   ';'
+    ;
+
+asmStatement
+    :   '__asm__' '__volatile__'? '(' StringLiteral (':' asmPart?)* ')' ';'
+    ;
+
+asmPart
+    :   asmElement (',' asmElement)*
+    |   StringLiteral
+    ;
+
+asmElement
+    :  StringLiteral '(' postfixExpression ')'
     ;
 
 ifStatement
