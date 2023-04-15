@@ -36,7 +36,7 @@ compilationUnit
 externalDeclaration
     :   functionDefinition
     |   functionDefinitionKandR
-    |   functionDeclaration ';'
+    |   functionMultiDeclaration
     |   'extern'? variableDeclaration
     |   typeDeclaration ';'
     |   typeDefinition
@@ -66,24 +66,31 @@ functionSpecifier
     ;
 
 //if type not spedified : default return int
-functionDeclaration
-    :   '__extension__'? gccDeclaratorExtension1* storageFuncSpecifier* functionSpecifier? gccDeclaratorExtension1*
-            type? function gccDeclaratorExtension2*
+functionRetType
+    :   '__extension__'? gccAttributeSpecifierFuncs* storageFuncSpecifier* functionSpecifier?
+        gccAttributeSpecifierFuncs* type?
+    ;
+
+functionExt
+    : function gccDeclaratorExtension2?
     ;
 
 function
     : Identifier functionParameters
     | '(' function ')'
     | visualExtension function
-    | gccDeclaratorExtension1 function
+    | gccAttributeSpecifierFuncs function
     | typeModifier function
     | function arrayOneDim //returns pointer to array
     | function functionParameters //returns pointer to function
     ;
 
+functionMultiDeclaration
+    :   functionRetType functionExt (',' functionExt)* ';'
+    ;
 
 functionDefinition
-    :   functionDeclaration compoundStatement
+    :   functionRetType functionExt compoundStatement
     ;
 
 functionDefinitionKandR
@@ -153,7 +160,7 @@ parameterOrTypeList
     ;
 
 parameterOrType
-    : type variablePlace (array | functionParameters)? gccAttributeSpecifier?
+    : type variablePlace (array | functionParameters)? gccAttributeSpecifierFuncs?
     ;
 
 compoundStatement
@@ -227,7 +234,7 @@ variablePlace
     ;
 
 fieldDeclaration //typeName can't be void without modifiers ; bitField: anonymous field
-    : '__extension__'? alignas? type (fieldList|bitField)? gccDeclaratorExtension3?
+    : '__extension__'? alignas? type (fieldList|bitField)? gccAttributeSpecifierFields?
     ;
 
 alignas
@@ -239,8 +246,8 @@ fieldList
     ;
 
 fieldDeclarator
-    : typeModifier* typeQualifier* (variableName | surroundedVariableName) (bitField | array)? gccAttributeSpecifier?
-    | typeModifier* typeQualifier* surroundedVariableName functionParameters gccAttributeSpecifier?
+    : typeModifier* typeQualifier* (variableName | surroundedVariableName) (bitField | array)? gccAttributeSpecifierFields?
+    | typeModifier* typeQualifier* surroundedVariableName functionParameters gccAttributeSpecifierFields?
     ;
 
 functionParameters
@@ -264,7 +271,7 @@ fieldName
     ;
 
 structDeclaration
-        : '__extension__'? ('struct'|'union') Identifier? '{' fieldDeclarations? '}' gccAttributeSpecifier?
+        : '__extension__'? ('struct'|'union') Identifier? '{' fieldDeclarations? '}' gccAttributeSpecifierFuncs?
         ;
 
 fieldDeclarations
@@ -482,29 +489,29 @@ argumentList
     ;
 
 typeDefinition
-    : '__extension__'? 'typedef' typeQualifier* type fieldDeclarator gccAttributeSpecifier? ';'
-    | '__extension__'? 'typedef' typeQualifier* type? function gccAttributeSpecifier? ';'
+    : '__extension__'? 'typedef' typeQualifier* type fieldDeclarator gccAttributeSpecifierFuncs? ';'
+    | '__extension__'? 'typedef' typeQualifier* type? function gccAttributeSpecifierFuncs? ';'
     ;
 
 visualExtension
     : '__cdecl'
     ;
 
-gccDeclaratorExtension1  //__attribute__ ((visibility ("default"))) or ((__always_inline__))
-    : '__attribute__' '(' '(' Identifier ('(' (StringLiteral | integerConstant) ')')? ')' ')'
-    ;
-
 gccDeclaratorExtension2
-    :   '__asm__' '(' StringLiteral+ ')'
-    |   gccAttributeSpecifier
+    :  (gccAttributeSpecifierFuncs | '__asm__' '(' StringLiteral+ ')')+
     ;
 
 //Identifier is usually __aligned__ but it is not keyword
-gccDeclaratorExtension3
-    : '__attribute__' '(' '(' Identifier'(' '__alignof__' '(' typeName ')' ')' ')' ')'
+gccAttributeSpecifierFields
+    :   '__attribute__' '(' '(' Identifier ('(' attributeAlignment ')')? ')' ')'
     ;
 
-gccAttributeSpecifier
+attributeAlignment
+    :   '__alignof__' '(' typeName ')'
+    |   conditionalExpression
+    ;
+
+gccAttributeSpecifierFuncs
     :   '__attribute__' '(' '(' gccAttributeList? ')' ')'
     ;
 
