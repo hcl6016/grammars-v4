@@ -193,10 +193,14 @@ variableDeclarator
     : fieldDeclarator ('=' initializer)?
     ;
 
+structInitializer
+    : '{' (fieldInitializer (',' fieldInitializer)*)? '}'
+    ;
+
 initializer
     :  conditionalExpression
-    | '{' '}'
-    | '{' fieldInitializer (',' fieldInitializer)* '}'
+    |  structInitializer
+    |  arrayInitializer
     ;
 
 fieldInitializer
@@ -411,7 +415,7 @@ multiplicativeExpression
 
 castExpression
     :   unaryExpression
-    |   '(' typeSpecifier ')' (castExpression | arrayInitializer | initializer)
+    |   '(' typeSpecifier ')' (castExpression | arrayInitializer | structInitializer)
     ;
 
 unaryOperator
