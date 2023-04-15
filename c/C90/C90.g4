@@ -135,6 +135,8 @@ typeName
     | 'long'? 'double'
     | 'float'? '_Complex'
     | 'long'? 'double' '_Complex'
+    | '_Complex' 'float'
+    | '_Complex' 'long'? 'double'
     | 'void'
     | ('struct'|'union') Identifier
     | 'enum' Identifier
