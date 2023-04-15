@@ -87,7 +87,8 @@ functionDefinition
     ;
 
 functionDefinitionKandR
-    :   type typeModifier* Identifier '(' varListKandR? ')' (type typeModifier* Identifier ';')* compoundStatement
+    :   type typeModifier* Identifier '(' varListKandR? ')' gccDeclaratorExtension2?
+        (type variable (array | functionParameters)? ';')* compoundStatement
     ;
 
 varListKandR
@@ -155,7 +156,6 @@ parameterOrType
     : type variablePlace? (array | functionParameters)? gccAttributeSpecifier?
     ;
 
-
 compoundStatement
     :   '{' blockItem* '}'
     ;
@@ -213,12 +213,17 @@ variableName
     | Identifier
     ;
 
+variable
+     : '(' variable ')'
+    | (typeModifier | typeQualifier) variable
+    | Identifier
+    ;
+
 variablePlace
      : '(' variablePlace? ')'
     | (typeModifier | typeQualifier) variablePlace?
     | Identifier
     ;
-
 
 fieldDeclaration //typeName can't be void without modifiers ; bitField: anonymous field
     : '__extension__'? alignas? type (fieldList|bitField)? gccDeclaratorExtension3?
@@ -472,7 +477,7 @@ gccDeclaratorExtension3
     ;
 
 gccAttributeSpecifier
-    :   '__attribute__' '(' '(' gccAttributeList ')' ')'
+    :   '__attribute__' '(' '(' gccAttributeList? ')' ')'
     ;
 
 gccAttributeList
