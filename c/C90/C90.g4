@@ -30,10 +30,10 @@
 grammar C90;
 
 compilationUnit
-    :   externalDeclaration* EOF
+    :   declaration* EOF
     ;
 
-externalDeclaration
+declaration
     :   functionDefinition
     |   functionDefinitionKandR
     |   functionMultiDeclaration
@@ -94,7 +94,7 @@ functionDefinition
     ;
 
 functionDefinitionKandR
-    :   functionRetType typeModifier* Identifier '(' varListKandR? ')' gccDeclaratorExtension2?
+    :   functionRetType typeModifier* Identifier '(' varListKandR? ')'
             parametersKandRlist? compoundStatement
     ;
 
@@ -166,11 +166,11 @@ parametersKandRlist
     ;
 
 parametersKandR
-    : gccAttributeOrAlignas? type parameterKandR (',' parameterKandR)*
+    : type parameterKandR (',' parameterKandR)*
     ;
 
 parameterKandR
-    : typeModifier* typeQualifier* variable (array | functionParameters)? gccAttributeSpecifierFuncs?
+    : gccAttributeOrAlignas? typeModifier* typeQualifier* variable (array | functionParameters)? gccAttributeSpecifierFuncs?
     ;
 
 parameterOrType
@@ -178,15 +178,7 @@ parameterOrType
     ;
 
 compoundStatement
-    :   '{' blockItem* '}'
-    ;
-
-blockItem
-    :   variableDeclaration
-    |   typeDeclaration ';'
-    |   typeDefinition
-    |   statement
-    |   label
+    :   '{' (declaration| statement)*'}' //mix only >= c99
     ;
 
 label
@@ -300,6 +292,7 @@ statement
     |   ifStatement
     |   switchStatement
     |   asmStatement
+    |   label
     |   'goto' Identifier ';'
     |   'goto' '*' unaryExpression ';'
     |   'return' commaExpression? ';'
@@ -512,7 +505,7 @@ gccDeclaratorExtension2
 
 //Identifier is usually __aligned__ but it is not keyword
 gccAttributeOrAlignas
-    :   '__attribute__' '(' '(' Identifier ('(' attributeAlignment ')')? ')' ')'
+    :   '__attribute__' '(' '(' (Identifier ('(' attributeAlignment ')')? )? ')' ')'
     |   '_Alignas' '(' conditionalExpression ')'
     ;
 
