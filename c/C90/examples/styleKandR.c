@@ -17,7 +17,7 @@ void Sort_array(Tab,Last) int Tab[]; int Last; {
    while (Swap);
 }
 
-int bar1(param) __attribute__ (()) int param(void);{
+int bar1(param) int __attribute__(()) param(void); {
     return 0;
 }
 
