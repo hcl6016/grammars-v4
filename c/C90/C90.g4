@@ -182,7 +182,7 @@ label
     ;
 
 variableDeclaration
-    : '__extension__'? alignas? type variableList ';' //typeName can't be void without modifiers
+    : '__extension__'? gccAttributeOrAlignas* type variableList ';' //typeName can't be void without modifiers
     ;
 
 variableList
@@ -236,11 +236,7 @@ variablePlace
     ;
 
 fieldDeclaration //typeName can't be void without modifiers ; bitField: anonymous field
-    : '__extension__'? alignas? type (fieldList | bitField)? gccAttributeSpecifierFields?
-    ;
-
-alignas
-    : '_Alignas' '(' conditionalExpression ')'
+    : '__extension__'? gccAttributeOrAlignas* type (fieldList | bitField)? gccAttributeOrAlignas*
     ;
 
 fieldList
@@ -248,8 +244,8 @@ fieldList
     ;
 
 fieldDeclarator
-    : typeModifier* typeQualifier* (variableName | surroundedVariableName) (bitField | array)? gccAttributeSpecifierFields?
-    | typeModifier* typeQualifier* surroundedVariableName functionParameters gccAttributeSpecifierFields?
+    : typeModifier* typeQualifier* (variableName | surroundedVariableName) (bitField | array)? gccAttributeOrAlignas*
+    | typeModifier* typeQualifier* surroundedVariableName functionParameters gccAttributeOrAlignas*
     ;
 
 functionParameters
@@ -504,8 +500,9 @@ gccDeclaratorExtension2
     ;
 
 //Identifier is usually __aligned__ but it is not keyword
-gccAttributeSpecifierFields
+gccAttributeOrAlignas
     :   '__attribute__' '(' '(' Identifier ('(' attributeAlignment ')')? ')' ')'
+    |   '_Alignas' '(' conditionalExpression ')'
     ;
 
 attributeAlignment
