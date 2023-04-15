@@ -287,6 +287,8 @@ statement
     |   loopStatement
     |   ifStatement
     |   switchStatement
+    |   caseLabel
+    |   defaulLabel
     |   asmStatement
     |   label
     |   'goto' Identifier ';'
@@ -314,17 +316,19 @@ ifStatement
     : 'if' '(' commaExpression ')' statement ('else' statement )?
     ;
 
+/* Relation 'case' to 'switch' is like relation contionue/break to for/while loops:
+   must be inside these statement, but it can't be checked with non context gramamr,
+   if we want to avoid duplicate rules and is left to be checked by semantics */
 switchStatement
-    : 'switch' '(' commaExpression ')' '{' (caseLabel | label)* defaultLabel? '}'
+    : 'switch' '(' commaExpression ')' statement
     ;
 
 caseLabel
-    : 'case' literal ':' statement*
-    | 'case' conditionalExpression ':' statement*
+    : 'case' (literal | conditionalExpression) ':'
     ;
 
-defaultLabel
-    : 'default' ':' statement*
+defaulLabel
+    : 'default' ':'
     ;
 
 
