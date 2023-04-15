@@ -435,6 +435,8 @@ unaryExpression
     |   unaryOperator castExpression
     |   sizeofOrAlignof '(' typeSpecifier ')'
     |   sizeofOrAlignof '(' conditionalExpression ')'
+    |   sizeofOrAlignof typeSpecifier
+    |   sizeofOrAlignof conditionalExpression
     |   '__builtin_offsetof' '(' type ',' postfixExpression ')'
     ;
 
