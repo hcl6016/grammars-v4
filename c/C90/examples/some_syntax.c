@@ -10,6 +10,16 @@ typedef int __attribute__((vector_size (8))) vec;
 
 unsigned long long int * const sssa,cccc;
 
+/* postfix expression, arrays */
+void arrayExpr ()
+{
+    char array[100];
+    int number;
+    int nn = array[number = array[number + 1] ? number + 1 : 0];
+    nn = array[number = array[number + 1]];
+}
+
+
 typedef enum aenum{ea,eb,ec=3} newtype4;
 /*enum as expression*/
 enum EVRPC_HOOK_RESULT {

@@ -485,7 +485,7 @@ typeSpecifier
 
 postfixExpression
     :   primaryExpression
-    |   postfixExpression '[' conditionalExpression ']'
+    |   postfixExpression '[' assignmentExpression ']'
     |   postfixExpression '(' argumentExpressionList? ')'
     |   postfixExpression '.' Identifier
     |   postfixExpression '->' Identifier
