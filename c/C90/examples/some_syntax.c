@@ -10,6 +10,11 @@ typedef int __attribute__((vector_size (8))) vec;
 
 unsigned long long int * const sssa,cccc;
 
+/* unary expression */
+void paramGoto(int param){
+    goto *(void*)param;
+}
+
 /* postfix expression, arrays */
 void arrayExpr ()
 {
@@ -142,7 +147,7 @@ int main() {
     int k = b ? : 2;
 
     int c = 22,d;
-    printf("%d", sizeof (int));
+    printf("%ld", sizeof (int));
     char *str= "\x1";
 
     /*if expresson can be assignment*/

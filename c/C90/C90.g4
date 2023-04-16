@@ -319,7 +319,7 @@ statement
     |   asmStatement
     |   label
     |   'goto' Identifier ';'
-    |   'goto' '*' unaryExpression ';'
+    |   'goto' '*' castExpression ';'
     |   'return' commaExpression? ';'
     |   'continue' ';'
     |   'break' ';'
