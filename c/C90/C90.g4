@@ -177,7 +177,7 @@ parameterOrType
     ;
 
 compoundStatement
-    :   '{' (declaration| statement)*'}' //mix only >= c99
+    :   '{' (declaration | statement)*'}'
     ;
 
 label
@@ -479,7 +479,8 @@ primaryExpression
     :   Identifier
     |   literal
     |   StringLiteral+
-    |   '('commaExpression ')'
+    |   '(' commaExpression ')'
+    |   '__extension__'? '(' compoundStatement ')'
     ;
 
 
