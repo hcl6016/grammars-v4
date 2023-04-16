@@ -138,6 +138,7 @@ typeName
     | complex 'float'
     | complex 'long'? 'double'
     | 'long'? unsignedOrSigned? 'int'? complex
+    | complex 'long'? unsignedOrSigned? 'int'
     | 'void'
     | ('struct'|'union') Identifier
     | 'enum' Identifier
