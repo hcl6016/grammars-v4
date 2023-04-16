@@ -46,37 +46,31 @@ declaration
 storageFuncSpecifier
     :   'static'
     |   '__inline__'
+    |  '__inline'
     |   'extern'
-    ;
-
-storageVarSpecifier
-    :   'register'
-    |   'static'
+    |   '__thread'
+    |   'register'
     |   '_Thread_local'
     ;
-
 
 typeWillBeDeclared
     : ('struct'|'union') Identifier ';'
     ;
 
-functionSpecifier
-    :  '__inline'
-    ;
-
 //if type not spedified : default return int
-externalType
-    :   '__extension__'? gccDeclaratorExtension* storageFuncSpecifier* functionSpecifier?
-        gccDeclaratorExtension* type storageFuncSpecifier* gccDeclaratorExtension*
+type
+    :   '__extension__'? gccDeclaratorExtension* storageFuncSpecifier* typeQualifier*
+        gccDeclaratorExtension*
+        (storageFuncSpecifier| typeQualifier| typeName | typeDeclaration)
+        storageFuncSpecifier* gccDeclaratorExtension*
     ;
-
 
 functionDefinition
-    :   'extern'? '__extension__'? gccDeclaratorExtension* externalType? attributedDeclarator compoundStatement
+    :   'extern'? '__extension__'? gccDeclaratorExtension* type? attributedDeclarator compoundStatement
     ;
 
 functionDefinitionKandR
-    :   'extern'? '__extension__'? gccDeclaratorExtension* externalType? attributedDeclarator parametersKandRlist? compoundStatement
+    :   'extern'? '__extension__'? gccDeclaratorExtension* type? attributedDeclarator parametersKandRlist? compoundStatement
     ;
 
 varListKandR
@@ -94,12 +88,6 @@ typeQualifier
 typeDeclaration
     : structDeclaration
     | enumDeclaration
-    ;
-
-type
-    : storageVarSpecifier* typeQualifier* (typeName | typeDeclaration)
-    | storageVarSpecifier typeQualifier*
-    | storageVarSpecifier* typeQualifier
     ;
 
 complex
@@ -158,7 +146,7 @@ parametersKandR
     ;
 
 parameterOrType
-    :   gccDeclaratorExtension* type (declarator | declaratorPlace) gccDeclaratorExtension*
+    :   type (declarator | declaratorPlace) gccDeclaratorExtension*
     ;
 
 compoundStatement
@@ -170,7 +158,7 @@ label
     ;
 
 varFuncDeclaration
-    :    'extern'? '__extension__'? gccDeclaratorExtension* externalType? varFuncList ';'
+    :    'extern'? '__extension__'? gccDeclaratorExtension* type? varFuncList ';'
     ;
 
 varFuncList
@@ -276,7 +264,7 @@ variableName
 
 
 fieldDeclaration //typeName can't be void without modifiers ; bitField: anonymous field
-    : '__extension__'? gccDeclaratorExtension* type (fieldList | bitField)? gccDeclaratorExtension*
+    : type (fieldList | bitField)? gccDeclaratorExtension*
     ;
 
 fieldList
@@ -477,7 +465,7 @@ unaryExpression
     |   sizeofOrAlignof typeSpecifier
     |   sizeofOrAlignof conditionalExpression
     |   '__builtin_offsetof' '(' type ',' postfixExpression ')'
-    |  '__builtin_va_arg' '(' postfixExpression ',' type ')'
+    |  '__builtin_va_arg' '(' postfixExpression ',' typeSpecifier ')'
     |  ('__real__'|'__imag__') unaryExpression
     ;
 
