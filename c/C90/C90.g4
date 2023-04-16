@@ -67,25 +67,12 @@ functionSpecifier
 //if type not spedified : default return int
 externalType
     :   '__extension__'? gccDeclaratorExtension* storageFuncSpecifier* functionSpecifier?
-        gccDeclaratorExtension* type storageFuncSpecifier*
+        gccDeclaratorExtension* type storageFuncSpecifier* gccDeclaratorExtension*
     ;
 
-functionExt
-    : function gccDeclaratorExtension*
-    ;
-
-function
-    : Identifier functionParameters
-    | '(' function ')'
-    | visualExtension function
-    | gccDeclaratorExtension function
-    | typeModifier function
-    | function arrayOneDim //returns pointer to array
-    | function functionParameters //returns pointer to function
-    ;
 
 functionDefinition
-    :   externalType? functionExt compoundStatement
+    :   'extern'? '__extension__'? gccDeclaratorExtension* externalType? attributedDeclarator compoundStatement
     ;
 
 functionDefinitionKandR
@@ -152,7 +139,7 @@ unsignedOrSigned
     ;
 
 typeModifier
-    : '*' gccDeclaratorExtension?
+    : '*'
     ;
 
 fixedParameterOrTypeList
@@ -188,17 +175,45 @@ label
     ;
 
 varFuncDeclaration
-    : 'extern'? '__extension__'? gccDeclaratorExtension* externalType? varFuncList ';' //typeName can't be void without modifiers
+    :    'extern'? '__extension__'? gccDeclaratorExtension* externalType? varFuncList ';'
     ;
 
 varFuncList
-    : varFuncDeclarator (',' varFuncDeclarator)*
+    : attributedDeclarator (',' attributedDeclarator)*
     ;
 
-varFuncDeclarator
-    :   gccDeclaratorExtension* fieldDeclarator ('=' initializer)?
-    |   functionExt
+attributedDeclarator
+    :   declarator gccDeclaratorExtension* ('=' initializer)?
     ;
+
+declarator
+    : (typeModifier | typeQualifier) declarator
+    | '(' declarator ')'
+    | gccDeclaratorExtension declarator
+    | baseDeclarator
+    ;
+
+baseDeclarator
+    : name
+    | nameParameters
+    | nameArray
+    ;
+
+name
+    :   visualExtension?  Identifier
+    |   '(' name ')'
+    ;
+
+nameParameters
+    : '(' nameParameters ')'
+    | (name | '(' declarator ')') functionParameters
+    ;
+
+nameArray
+    : '(' nameArray ')'
+    | (name | '(' declarator ')') array
+    ;
+
 
 structInitializer
     : '{' (fieldInitializer (',' fieldInitializer)* ','? )? '}'
@@ -256,12 +271,11 @@ fieldDeclaration //typeName can't be void without modifiers ; bitField: anonymou
     ;
 
 fieldList
-    : fieldDeclarator (',' fieldDeclarator)*
+    :   fieldDeclarator (',' fieldDeclarator)*
     ;
 
 fieldDeclarator
-    : typeModifier* typeQualifier* (variableName | surroundedVariableName) (bitField | array)? gccDeclaratorExtension*
-    | typeModifier* typeQualifier* surroundedVariableName functionParameters gccDeclaratorExtension*
+    :    attributedDeclarator bitField?
     ;
 
 functionParameters
@@ -510,14 +524,8 @@ literal
 
 typeDefinition
     : '__extension__'? 'typedef' gccDeclaratorExtension* typeQualifier* type
-        definedType (',' definedType)*
-        gccDeclaratorExtension* ';'
+        attributedDeclarator (',' attributedDeclarator)* ';'
     ;
-
-definedType
-    :   gccDeclaratorExtension* (fieldDeclarator | function)
-    ;
-
 
 visualExtension
     : '__cdecl'
