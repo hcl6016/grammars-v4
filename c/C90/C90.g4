@@ -136,6 +136,7 @@ typeName
     | 'long'? 'double' complex
     | complex 'float'
     | complex 'long'? 'double'
+    | 'long'? unsignedOrSigned? 'int'? complex
     | 'void'
     | ('struct'|'union') Identifier
     | 'enum' Identifier
@@ -444,6 +445,7 @@ unaryExpression
     |   sizeofOrAlignof conditionalExpression
     |   '__builtin_offsetof' '(' type ',' postfixExpression ')'
     |  '__builtin_va_arg' '(' postfixExpression ',' type ')'
+    |  ('__real__'|'__imag__') unaryExpression
     ;
 
 sizeofOrAlignof
