@@ -51,6 +51,7 @@ storageFuncSpecifier
     |   'extern'
     |   '__thread'
     |   'register'
+    |   'auto'
     |   '_Thread_local'
     ;
 
