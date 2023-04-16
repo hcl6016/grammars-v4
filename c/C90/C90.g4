@@ -509,7 +509,7 @@ literal
 
 
 typeDefinition
-    : '__extension__'? 'typedef' typeQualifier* type
+    : '__extension__'? 'typedef' gccDeclaratorExtension* typeQualifier* type
         definedType (',' definedType)*
         gccDeclaratorExtension* ';'
     ;
@@ -529,8 +529,12 @@ gccDeclaratorExtension
     | '_Alignas' '(' conditionalExpression ')'
     ;
 
+attribute
+    : '__attribute__' | '__attribute'
+    ;
+
 gccAttributeSpecifier
-    :   '__attribute__' '(' '(' gccAttributeList? ')' ')'
+    :   attribute '(' '(' gccAttributeList? ')' ')'
     ;
 
 gccAttributeList
