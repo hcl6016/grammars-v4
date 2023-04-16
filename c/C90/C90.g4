@@ -609,6 +609,7 @@ LongLongSuffix
 fragment
 FloatingSuffix
     :  'f' | 'l' | 'F' | 'L'
+    |  'fi' /* imag part of complex */
     ;
 
 fragment
