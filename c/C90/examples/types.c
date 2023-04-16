@@ -10,5 +10,5 @@ int main() {
     __real__ dc++;
     __imag__ ++dc;
     ++__imag__ dc;
-    /*pint = (__const *)a;*/
+    pint = (__const *)a;
 }

@@ -113,6 +113,7 @@ typeDeclaration
 type
     : storageVarSpecifier* typeQualifier* (typeName | typeDeclaration)
     | storageVarSpecifier typeQualifier*
+    | storageVarSpecifier* typeQualifier
     ;
 
 complex
