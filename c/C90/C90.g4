@@ -39,6 +39,7 @@ declaration
     |   varFuncDeclaration
     |   typeDeclaration ';'
     |   typeDefinition
+    |   typeofStmt
     |   typeWillBeDeclared
     |   ';'
     ;
@@ -522,6 +523,11 @@ literal
 typeDefinition
     : '__extension__'? 'typedef' gccDeclaratorExtension* typeQualifier* type
         attributedDeclarator (',' attributedDeclarator)* ';'
+    ;
+
+typeofStmt
+    :   'extern' '__typeof' '(' (typeSpecifier | conditionalExpression ) ')'
+            Identifier gccDeclaratorExtension* ';'
     ;
 
 visualExtension
