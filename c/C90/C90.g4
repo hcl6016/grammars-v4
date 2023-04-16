@@ -504,8 +504,15 @@ literal
 
 
 typeDefinition
-    : '__extension__'? 'typedef' typeQualifier* type gccDeclaratorExtension* (fieldDeclarator | function) gccDeclaratorExtension* ';'
+    : '__extension__'? 'typedef' typeQualifier* type
+        definedType (',' definedType)*
+        gccDeclaratorExtension* ';'
     ;
+
+definedType
+    :   gccDeclaratorExtension* (fieldDeclarator | function)
+    ;
+
 
 visualExtension
     : '__cdecl'
