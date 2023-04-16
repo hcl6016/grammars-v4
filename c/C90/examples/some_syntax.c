@@ -2,9 +2,15 @@
 #include <stdlib.h>
 /* dirty fragments of syntax */
 
+int *__attribute__((__aligned__(16))) *p;
+int b;
+int static *estat = &b, *j;
+struct __attribute__((packed)) MyStruct { long long a; char b; };
+typedef int __attribute__((vector_size (8))) vec;
+
 unsigned long long int * const sssa,cccc;
 
-typedef enum a{a,b,c=3} newtype4;
+typedef enum aenum{ea,eb,ec=3} newtype4;
 /*enum as expression*/
 enum EVRPC_HOOK_RESULT {
     EVRPC_TERMINATE = -1,
@@ -25,7 +31,8 @@ void aaa(int pmatch[__restrict]);
 
 /*K&R style*/
 int funcKandRstyle(a,b) int a; float b; {
-   printf("K&R syntax\n");
+    printf("K&R syntax\n");
+    return 0;
 }
 
 struct __gconv_step_data{
@@ -99,7 +106,6 @@ extern void funcExtern(int, int k);
 
 
 void func11(int n, int k) {
-    func1(n=2, k=n=1);
     struct structure2{int field;};
     struct structure2 str2;
     str2.field = 2;
@@ -121,8 +127,8 @@ int *func3() {
 }
 
 int main() {
+    register unsigned int reg __asm ("ecx");
     /* second expression can be omitted, then its value = 1 */
-    bool b = true;
     int k = b ? : 2;
 
     int c = 22,d;

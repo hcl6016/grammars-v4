@@ -66,19 +66,19 @@ functionSpecifier
 
 //if type not spedified : default return int
 externalType
-    :   '__extension__'? gccAttributeSpecifierFuncs* storageFuncSpecifier* functionSpecifier?
-        gccAttributeSpecifierFuncs* type
+    :   '__extension__'? gccDeclaratorExtension* storageFuncSpecifier* functionSpecifier?
+        gccDeclaratorExtension* type storageFuncSpecifier*
     ;
 
 functionExt
-    : function gccDeclaratorExtension2?
+    : function gccDeclaratorExtension*
     ;
 
 function
     : Identifier functionParameters
     | '(' function ')'
     | visualExtension function
-    | gccAttributeSpecifierFuncs function
+    | gccDeclaratorExtension function
     | typeModifier function
     | function arrayOneDim //returns pointer to array
     | function functionParameters //returns pointer to function
@@ -151,7 +151,7 @@ unsignedOrSigned
     ;
 
 typeModifier
-    : '*'
+    : '*' gccDeclaratorExtension?
     ;
 
 fixedParameterOrTypeList
@@ -171,11 +171,11 @@ parametersKandR
     ;
 
 parameterKandR
-    : gccAttributeOrAlignas? typeModifier* typeQualifier* variable (array | functionParameters)? gccAttributeSpecifierFuncs?
+    : gccDeclaratorExtension* typeModifier* typeQualifier* variable (array | functionParameters)? gccDeclaratorExtension*
     ;
 
 parameterOrType
-    : gccAttributeOrAlignas? type variablePlace (array | functionParameters)? gccAttributeSpecifierFuncs?
+    : gccDeclaratorExtension* type variablePlace (array | functionParameters)? gccDeclaratorExtension*
     ;
 
 compoundStatement
@@ -187,7 +187,7 @@ label
     ;
 
 varFuncDeclaration
-    : 'extern'? '__extension__'? gccAttributeOrAlignas* externalType? varFuncList ';' //typeName can't be void without modifiers
+    : 'extern'? '__extension__'? gccDeclaratorExtension* externalType? varFuncList ';' //typeName can't be void without modifiers
     ;
 
 varFuncList
@@ -195,7 +195,7 @@ varFuncList
     ;
 
 varFuncDeclarator
-    :   fieldDeclarator ('=' initializer)?
+    :   gccDeclaratorExtension* fieldDeclarator ('=' initializer)?
     |   functionExt
     ;
 
@@ -251,7 +251,7 @@ variablePlace
     ;
 
 fieldDeclaration //typeName can't be void without modifiers ; bitField: anonymous field
-    : '__extension__'? gccAttributeOrAlignas* type (fieldList | bitField)? gccAttributeOrAlignas*
+    : '__extension__'? gccDeclaratorExtension* type (fieldList | bitField)? gccDeclaratorExtension*
     ;
 
 fieldList
@@ -259,8 +259,8 @@ fieldList
     ;
 
 fieldDeclarator
-    : typeModifier* typeQualifier* (variableName | surroundedVariableName) (bitField | array)? gccAttributeOrAlignas*
-    | typeModifier* typeQualifier* surroundedVariableName functionParameters gccAttributeOrAlignas*
+    : typeModifier* typeQualifier* (variableName | surroundedVariableName) (bitField | array)? gccDeclaratorExtension*
+    | typeModifier* typeQualifier* surroundedVariableName functionParameters gccDeclaratorExtension*
     ;
 
 functionParameters
@@ -280,7 +280,7 @@ bitField
     ;
 
 structDeclaration
-        : '__extension__'? ('struct'|'union') Identifier? '{' fieldDeclarations? '}' gccAttributeSpecifierFuncs?
+        : '__extension__'? ('struct'|'union') gccDeclaratorExtension* Identifier? '{' fieldDeclarations? '}' gccDeclaratorExtension*
         ;
 
 fieldDeclarations
@@ -306,8 +306,12 @@ statement
     |   ';'
     ;
 
+asm
+    :  '__asm__' |  '__asm'
+    ;
+
 asmStatement
-    :   '__asm__' '__volatile__'? '(' StringLiteral (':' asmPart?)* ')' ';'
+    :   asm '__volatile__'? '(' StringLiteral (':' asmPart?)* ')' ';'
     ;
 
 asmPart
@@ -427,7 +431,7 @@ multiplicativeExpression
 
 castExpression
     :   unaryExpression
-    |   '(' gccAttributeOrAlignas? typeSpecifier ')' (castExpression | arrayInitializer | structInitializer)
+    |   '(' gccDeclaratorExtension* typeSpecifier ')' (castExpression | arrayInitializer | structInitializer)
     ;
 
 unaryOperator
@@ -500,30 +504,20 @@ literal
 
 
 typeDefinition
-    : '__extension__'? 'typedef' typeQualifier* type fieldDeclarator gccAttributeSpecifierFuncs? ';'
-    | '__extension__'? 'typedef' typeQualifier* type function gccAttributeSpecifierFuncs? ';'
+    : '__extension__'? 'typedef' typeQualifier* type gccDeclaratorExtension* (fieldDeclarator | function) gccDeclaratorExtension* ';'
     ;
 
 visualExtension
     : '__cdecl'
     ;
 
-gccDeclaratorExtension2
-    :  (gccAttributeSpecifierFuncs | '__asm__' '(' StringLiteral+ ')')+
+gccDeclaratorExtension
+    :  gccAttributeSpecifier
+    |  asm '(' StringLiteral+ ')'
+    | '_Alignas' '(' conditionalExpression ')'
     ;
 
-//Identifier is usually __aligned__ but it is not keyword
-gccAttributeOrAlignas
-    :   '__attribute__' '(' '(' (Identifier ('(' attributeAlignment ')')? )? ')' ')'
-    |   '_Alignas' '(' conditionalExpression ')'
-    ;
-
-attributeAlignment
-    :   '__alignof__' '(' typeName ')'
-    |   conditionalExpression
-    ;
-
-gccAttributeSpecifierFuncs
+gccAttributeSpecifier
     :   '__attribute__' '(' '(' gccAttributeList? ')' ')'
     ;
 
@@ -531,8 +525,13 @@ gccAttributeList
     :   gccAttribute (',' gccAttribute)*
     ;
 
+attributeAlignment
+    :   '__alignof__' '(' typeName ')'
+    |   conditionalExpression
+    ;
+
 gccAttribute
-    : Identifier ('(' (StringLiteral | (Identifier | integerConstant) ( ',' integerConstant )*) ')')?
+    : Identifier ('(' (attributeAlignment | StringLiteral | (Identifier | integerConstant) ( ',' integerConstant )*) ')')?
     | 'const'
     ;
 
