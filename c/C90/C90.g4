@@ -102,7 +102,7 @@ typeQualifier
     |   '__const'
     |   '__restrict'
     |   '__restrict__'
-    |   'volatile'
+    |   volatile
     ;
 
 typeDeclaration
@@ -310,8 +310,12 @@ asm
     :  '__asm__' |  '__asm'
     ;
 
+volatile
+    :   'volatile' | '__volatile__'
+    ;
+
 asmStatement
-    :   asm '__volatile__'? '(' StringLiteral (':' asmPart?)* ')' ';'
+    :   asm volatile? '(' StringLiteral (':' asmPart?)* ')' ';'
     ;
 
 asmPart
