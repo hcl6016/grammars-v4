@@ -76,8 +76,7 @@ functionDefinition
     ;
 
 functionDefinitionKandR
-    :   externalType? typeModifier* Identifier '(' varListKandR? ')'
-            parametersKandRlist? compoundStatement
+    :   'extern'? '__extension__'? gccDeclaratorExtension* externalType? attributedDeclarator parametersKandRlist? compoundStatement
     ;
 
 varListKandR
@@ -155,15 +154,11 @@ parametersKandRlist
     ;
 
 parametersKandR
-    : type parameterKandR (',' parameterKandR)*
-    ;
-
-parameterKandR
-    : gccDeclaratorExtension* typeModifier* typeQualifier* variable (array | functionParameters)? gccDeclaratorExtension*
+    : type declarator (',' declarator)*
     ;
 
 parameterOrType
-    : gccDeclaratorExtension* type variablePlace (array | functionParameters)? gccDeclaratorExtension*
+    :   gccDeclaratorExtension* type (declarator | declaratorPlace) gccDeclaratorExtension*
     ;
 
 compoundStatement
@@ -214,6 +209,34 @@ nameArray
     | (name | '(' declarator ')') array
     ;
 
+declaratorPlace
+    : (typeModifier | typeQualifier) declaratorPlace
+    | '(' declaratorPlace ')'
+    | gccDeclaratorExtension declaratorPlace
+    | baseDeclaratorPlace
+    ;
+
+baseDeclaratorPlace
+    : place
+    | placeParameters
+    | placeArray
+    ;
+
+place
+    :   visualExtension?
+    |   '(' place ')'
+    ;
+
+placeParameters
+    : '(' placeParameters ')'
+    | (place | '(' declaratorPlace ')') functionParameters
+    ;
+
+placeArray
+    : '(' placeArray ')'
+    | (place | '(' declaratorPlace ')') array
+    ;
+
 
 structInitializer
     : '{' (fieldInitializer (',' fieldInitializer)* ','? )? '}'
@@ -251,20 +274,6 @@ variableName
     | Identifier
     ;
 
-variable
-     : '(' variable ')'
-    | (typeModifier | typeQualifier) variable
-    | variable arrayOneDim
-    | Identifier
-    ;
-
-variablePlace
-     : '(' variablePlace ')'
-    | (typeModifier | typeQualifier) variablePlace
-    | variablePlace arrayOneDim
-    | Identifier
-    | /*empty*/
-    ;
 
 fieldDeclaration //typeName can't be void without modifiers ; bitField: anonymous field
     : '__extension__'? gccDeclaratorExtension* type (fieldList | bitField)? gccDeclaratorExtension*
@@ -478,16 +487,8 @@ sizeofOrAlignof
     |   '__alignof__'
     ;
 
-modifiersWithoutVariable
-    : '(' modifiersWithoutVariable')'
-    | (typeModifier | typeQualifier) modifiersWithoutVariable
-    | modifiersWithoutVariable arrayOneDim
-    | modifiersWithoutVariable functionParameters
-    | /*empty*/
-    ;
-
 typeSpecifier
-    :   type modifiersWithoutVariable
+    :   type declaratorPlace
     ;
 
 postfixExpression
