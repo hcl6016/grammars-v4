@@ -100,14 +100,12 @@ complex
 
 typeName
     : 'int'
-    | 'int' 'long'
+    | 'int' longLongShort
     | unsignedOrSigned 'int'?
-    | unsignedOrSigned? 'long' 'int'?
-    | '__extension__'? unsignedOrSigned? 'long' 'long' 'int'?
-    | 'long'? unsignedOrSigned 'int'?
-    | 'short'
-    | unsignedOrSigned? 'short' 'int'?
-    | 'short'? unsignedOrSigned 'int'?
+    | unsignedOrSigned? longLongShort 'int'?
+    | longLongShort? unsignedOrSigned 'int'?
+    | longLongShort
+    | unsignedOrSigned? longLongShort 'int'?
     | unsignedOrSigned? 'char'
     | 'float'
     | 'long'? 'double'
@@ -127,6 +125,12 @@ typeName
 unsignedOrSigned
     : 'unsigned'
     | 'signed'
+    ;
+
+longLongShort
+    :  'long'
+    |  'long' 'long'
+    |  'short'
     ;
 
 typeModifier
