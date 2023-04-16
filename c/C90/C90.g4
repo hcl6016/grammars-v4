@@ -65,12 +65,16 @@ type
         storageFuncSpecifier* gccDeclaratorExtension*
     ;
 
+typeExt
+    : 'extern'? '__extension__'? gccDeclaratorExtension* storageFuncSpecifier* type?
+    ;
+
 functionDefinition
-    :   'extern'? '__extension__'? gccDeclaratorExtension* type? attributedDeclarator compoundStatement
+    :   typeExt attributedDeclarator compoundStatement
     ;
 
 functionDefinitionKandR
-    :   'extern'? '__extension__'? gccDeclaratorExtension* type? attributedDeclarator parametersKandRlist? compoundStatement
+    :   typeExt attributedDeclarator parametersKandRlist? compoundStatement
     ;
 
 varListKandR
@@ -158,7 +162,7 @@ label
     ;
 
 varFuncDeclaration
-    :    'extern'? '__extension__'? gccDeclaratorExtension* type? varFuncList ';'
+    :   typeExt varFuncList ';'
     ;
 
 varFuncList
