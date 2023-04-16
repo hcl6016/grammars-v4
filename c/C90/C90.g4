@@ -202,7 +202,7 @@ structInitializer
     ;
 
 initializer
-    :  conditionalExpression
+    :  assignmentExpression
     |  structInitializer
     |  arrayInitializer
     ;
@@ -213,7 +213,12 @@ fieldInitializer
     ;
 
 arrayInitializer
-    : '{' conditionalExpression (',' conditionalExpression)* '}'
+    : '{' assignmentExpression (',' assignmentExpression)* '}'
+    | '{' arrayCellInitializer (',' arrayCellInitializer)* '}' //for incomplete initialization
+    ;
+
+arrayCellInitializer
+    : '[' conditionalExpression']' '=' assignmentExpression
     ;
 
 surroundedVariableName
