@@ -63,7 +63,7 @@ typeWillBeDeclared
 type
     :   '__extension__'? gccDeclaratorExtension* storageFuncSpecifier* typeQualifier*
         gccDeclaratorExtension*
-        (storageFuncSpecifier| typeQualifier| typeName | typeDeclaration)
+        (storageFuncSpecifier| typeQualifier| typeName | typeDeclaration | typeofExpr)
         storageFuncSpecifier* gccDeclaratorExtension*
     ;
 
@@ -108,6 +108,7 @@ typeName
     | longLongShort? unsignedOrSigned 'int'?
     | longLongShort
     | unsignedOrSigned? longLongShort 'int'?
+    | unsignedOrSigned? '__int128'
     | unsignedOrSigned? 'char'
     | 'float'
     | 'long'? 'double'
@@ -130,8 +131,8 @@ unsignedOrSigned
     ;
 
 longLongShort
-    :  'long'
-    |  'long' 'long'
+    :  'long' 'long'
+    |  'long'
     |  'short'
     ;
 
@@ -457,7 +458,7 @@ multiplicativeExpression
 
 castExpression
     :   unaryExpression
-    |   '(' gccDeclaratorExtension* typeSpecifier ')' (castExpression | arrayInitializer | structInitializer)
+    |   '__extension__'? '(' gccDeclaratorExtension* typeSpecifier ')' (castExpression | arrayInitializer | structInitializer)
     ;
 
 unaryOperator
@@ -522,13 +523,22 @@ literal
 
 
 typeDefinition
-    : '__extension__'? 'typedef' gccDeclaratorExtension* typeQualifier* type
-        attributedDeclarator (',' attributedDeclarator)* ';'
+    : '__extension__'? 'typedef' gccDeclaratorExtension* typeQualifier*
+        type attributedDeclarator (',' attributedDeclarator)* ';'
+    ;
+
+
+typeofKeyword
+    :   '__typeof' | '__typeof__'
+    ;
+
+typeofExpr
+    : typeofKeyword '(' ( typeSpecifier | conditionalExpression ) ')'
     ;
 
 typeofStmt
-    :   'extern' '__typeof' '(' (typeSpecifier | conditionalExpression ) ')'
-            Identifier gccDeclaratorExtension* ';'
+    :   'extern'? typeofExpr
+         attributedDeclarator (',' attributedDeclarator)* ';'
     ;
 
 visualExtension
