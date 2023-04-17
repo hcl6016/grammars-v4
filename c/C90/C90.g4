@@ -39,7 +39,6 @@ declaration
     |   varFuncDeclaration
     |   typeDeclaration ';'
     |   typeDefinition
-    |   typeofStmt
     |   typeWillBeDeclared
     |   ';'
     ;
@@ -534,11 +533,6 @@ typeofKeyword
 
 typeofExpr
     : typeofKeyword '(' ( typeSpecifier | conditionalExpression ) ')'
-    ;
-
-typeofStmt
-    :   'extern'? typeofExpr
-         attributedDeclarator (',' attributedDeclarator)* ';'
     ;
 
 visualExtension
