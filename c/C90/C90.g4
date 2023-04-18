@@ -35,7 +35,6 @@ compilationUnit
 
 declaration
     :   functionDefinition
-    |   functionDefinitionKandR
     |   varFuncDeclaration
     |   typeDeclaration ';'
     |   typeDefinition
@@ -66,16 +65,13 @@ type
         storageFuncSpecifier* gccDeclaratorExtension*
     ;
 
-typeExt
-    : 'extern'? '__extension__'? gccDeclaratorExtension* storageFuncSpecifier* type?
-    ;
-
+/*
+two similar alts is faster here than
+type? attributedDeclarator parametersKandRlist? compoundStatement
+*/
 functionDefinition
-    :   typeExt attributedDeclarator compoundStatement
-    ;
-
-functionDefinitionKandR
-    :   typeExt attributedDeclarator parametersKandRlist? compoundStatement
+    :   type? attributedDeclarator compoundStatement
+    |   type? attributedDeclarator parametersKandRlist compoundStatement
     ;
 
 varListKandR
@@ -145,6 +141,7 @@ fixedParameterOrTypeList
 
 parameterOrTypeList
     : fixedParameterOrTypeList (',' '...')?
+    | 'void'
     ;
 
 parametersKandRlist
@@ -168,7 +165,7 @@ label
     ;
 
 varFuncDeclaration
-    :   typeExt varFuncList ';'
+    :   type varFuncList ';'
     ;
 
 varFuncList
@@ -179,62 +176,39 @@ attributedDeclarator
     :   declarator gccDeclaratorExtension* ('=' initializer)?
     ;
 
+/*** declarator ***/
 declarator
-    : (typeModifier | typeQualifier) declarator
-    | '(' declarator ')'
-    | gccDeclaratorExtension declarator
-    | baseDeclarator
+    :   (typeModifier | typeQualifier) gccAttributeSpecifier* declarator
+    |   baseDeclarator
+    |   declaratorName
+    |   '(' gccAttributeSpecifier* declarator ')'
     ;
 
 baseDeclarator
-    : name
-    | nameParameters
-    | nameArray
+    :   declaratorName (functionParameters | array)
+    |   '('  declarator ')' (functionParameters | array)
     ;
 
-name
-    :   visualExtension?  Identifier
-    |   '(' name ')'
-    ;
-
-nameParameters
-    : '(' nameParameters ')'
-    | (name | '(' declarator ')') functionParameters
-    ;
-
-nameArray
-    : '(' nameArray ')'
-    | (name | '(' declarator ')') array
+declaratorName
+    :   visualExtensionFCall* Identifier
     ;
 
 declaratorPlace
-    : (typeModifier | typeQualifier) declaratorPlace
-    | '(' declaratorPlace ')'
-    | gccDeclaratorExtension declaratorPlace
-    | baseDeclaratorPlace
+    :   (typeModifier | typeQualifier) declaratorPlace
+    |   baseDeclaratorPlace
+    |   declaratorNamePlace
+    |   '(' declaratorPlace ')'
     ;
 
 baseDeclaratorPlace
-    : place
-    | placeParameters
-    | placeArray
+    :   declaratorNamePlace (functionParameters | array)
+    |   '('  declaratorPlace ')' (functionParameters | array)
     ;
 
-place
-    :   visualExtension?
-    |   '(' place ')'
+declaratorNamePlace
+    :   visualExtensionFCall*
     ;
-
-placeParameters
-    : '(' placeParameters ')'
-    | (place | '(' declaratorPlace ')') functionParameters
-    ;
-
-placeArray
-    : '(' placeArray ')'
-    | (place | '(' declaratorPlace ')') array
-    ;
-
+/*** end declarator ***/
 
 structInitializer
     : '{' (fieldInitializer (',' fieldInitializer)* ','? )? '}'
@@ -535,7 +509,7 @@ typeofExpr
     : typeofKeyword '(' ( typeSpecifier | conditionalExpression ) ')'
     ;
 
-visualExtension
+visualExtensionFCall
     : '__cdecl'
     ;
 
