@@ -320,7 +320,7 @@ asmPart
     ;
 
 asmElement
-    :  StringLiteral '(' postfixExpression ')'
+    :  StringLiteral '(' castExpression ')'
     ;
 
 ifStatement
