@@ -452,8 +452,8 @@ unaryOperator
 
 unaryExpression
     :   postfixExpression
-    |   '++' unaryExpression
-    |   '--' unaryExpression
+    |   '++' castExpression
+    |   '--' castExpression
     |   '&&' Identifier
     |   unaryOperator castExpression
     |   sizeofOrAlignof '(' typeSpecifier ')'
