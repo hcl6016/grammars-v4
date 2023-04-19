@@ -285,7 +285,7 @@ fieldDeclarations
         ;
 
 labeledStatement
-    : label* statement
+    : attributedLabel* statement
     ;
 
 statement
@@ -309,6 +309,9 @@ label
     |   defaulLabel
     ;
 
+attributedLabel
+    :   label (gccAttributeSpecifier* ';')?
+    ;
 
 asm
     :  '__asm__' |  '__asm'
