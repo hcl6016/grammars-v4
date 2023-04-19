@@ -157,10 +157,10 @@ parameterOrType
     ;
 
 compoundStatement
-    :   '{' (declaration | statement)*'}'
+    :   '{' (declaration | labeledStatement)*'}'
     ;
 
-label
+gotoLabel
     : Identifier ':'
     ;
 
@@ -284,16 +284,17 @@ fieldDeclarations
         | ';'+
         ;
 
+labeledStatement
+    : label* statement
+    ;
+
 statement
     :   compoundStatement
     |   expressionStatement
     |   loopStatement
     |   ifStatement
     |   switchStatement
-    |   caseLabel
-    |   defaulLabel
     |   asmStatement
-    |   label
     |   'goto' Identifier ';'
     |   'goto' '*' castExpression ';'
     |   'return' commaExpression? ';'
@@ -301,6 +302,13 @@ statement
     |   'break' ';'
     |   ';'
     ;
+
+label
+    :   gotoLabel
+    |   caseLabel
+    |   defaulLabel
+    ;
+
 
 asm
     :  '__asm__' |  '__asm'
@@ -324,14 +332,14 @@ asmElement
     ;
 
 ifStatement
-    : 'if' '(' commaExpression ')' statement ('else' statement )?
+    : 'if' '(' commaExpression ')' labeledStatement ('else' labeledStatement )?
     ;
 
 /* Relation 'case' to 'switch' is like relation contionue/break to for/while loops:
    must be inside these statement, but it can't be checked with non context gramamr,
    if we want to avoid duplicate rules and is left to be checked by semantics */
 switchStatement
-    : 'switch' '(' commaExpression ')' statement
+    : 'switch' '(' commaExpression ')' labeledStatement
     ;
 
 caseLabel
@@ -344,9 +352,9 @@ defaulLabel
 
 
 loopStatement
-    :   'while' '(' commaExpression ')' statement
-    |   'do' statement 'while' '(' commaExpression ')' ';'
-    |   'for' '(' commaExpression? ';' commaExpression? ';' commaExpression? ')' statement
+    :   'while' '(' commaExpression ')' labeledStatement
+    |   'do' labeledStatement 'while' '(' commaExpression ')' ';'
+    |   'for' '(' commaExpression? ';' commaExpression? ';' commaExpression? ')' labeledStatement
     ;
 
 expressionStatement
