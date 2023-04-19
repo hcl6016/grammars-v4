@@ -223,6 +223,7 @@ initializer
 fieldInitializer
     : initializer
     | '.' Identifier '=' initializer
+    | Identifier ':' initializer
     ;
 
 arrayInitializer
