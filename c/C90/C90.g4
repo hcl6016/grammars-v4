@@ -354,8 +354,7 @@ expressionStatement
     ;
 
 commaExpression
-    :   assignmentExpression
-    |   commaExpression ',' assignmentExpression
+    :   assignmentExpression (',' assignmentExpression)*
     ;
 
 assignmentOperator
@@ -372,61 +371,66 @@ conditionalExpression
     ;
 
 logicalOrExpression
-    :   logicalAndExpression
-    |   logicalOrExpression '||' logicalAndExpression
+    :   logicalAndExpression ('||' logicalAndExpression)*
     ;
 
 logicalAndExpression
-    :   inclusiveOrExpression
-    |   logicalAndExpression '&&' inclusiveOrExpression
+    :   inclusiveOrExpression ('&&' inclusiveOrExpression)*
     ;
 
 inclusiveOrExpression
-    :   exclusiveOrExpression
-    |   inclusiveOrExpression '|' exclusiveOrExpression
+    :   exclusiveOrExpression ('|' exclusiveOrExpression)*
     ;
 
 exclusiveOrExpression
-    :   andExpression
-    |   exclusiveOrExpression '^' andExpression
+    :   andExpression ('^' andExpression)*
     ;
 
 andExpression
-    :   equalityExpression
-    |   andExpression '&' equalityExpression
+    :   equalityExpression ('&' equalityExpression)*
+    ;
+
+eqop
+    :   '==' | '!='
     ;
 
 equalityExpression
-    :   relationalExpression
-    |   equalityExpression '==' relationalExpression
-    |   equalityExpression '!=' relationalExpression
+    :   relationalExpression (eqop relationalExpression)*
+    ;
+
+relop
+    : '<' | '>' | '<=' | '>='
     ;
 
 relationalExpression
-    :   shiftExpression
-    |   relationalExpression '<' shiftExpression
-    |   relationalExpression '>' shiftExpression
-    |   relationalExpression '<=' shiftExpression
-    |   relationalExpression '>=' shiftExpression
+    :   shiftExpression (relop shiftExpression)*
+    ;
+
+
+shiftop
+    :   '<<' | '>>'
     ;
 
 shiftExpression
-    :   additiveExpression
-    |   shiftExpression '<<' additiveExpression
-    |   shiftExpression '>>' additiveExpression
+    :   additiveExpression (shiftop additiveExpression)*
+    ;
+
+
+addop
+    : '+' | '-'
     ;
 
 additiveExpression
-    :   multiplicativeExpression
-    |   additiveExpression '+' multiplicativeExpression
-    |   additiveExpression '-' multiplicativeExpression
+    :   multiplicativeExpression (addop multiplicativeExpression)*
+    ;
+
+
+mulop
+    :   '*' | '/' | '%'
     ;
 
 multiplicativeExpression
-    :   castExpression
-    |   multiplicativeExpression '*' castExpression
-    |   multiplicativeExpression '/' castExpression
-    |   multiplicativeExpression '%' castExpression
+    :   castExpression (mulop castExpression)*
     ;
 
 castExpression
