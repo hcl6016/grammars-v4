@@ -1,6 +1,5 @@
 /*************************
 This file is preprocessed set of include files, which are compiled with GCC options -std=c90 -fsyntax-only
-**************************/
 #include <bits/atomic_wide_counter.h>
 #include <bits/endian.h>
 #include <bits/endianness.h>
