@@ -232,6 +232,7 @@ arrayInitializer
 
 arrayCellInitializer
     : '[' conditionalExpression']' '=' assignmentExpression
+    | '[' conditionalExpression '...' conditionalExpression ']' '=' assignmentExpression
     ;
 
 surroundedVariableName
