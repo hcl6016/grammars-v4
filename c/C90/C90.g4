@@ -232,7 +232,7 @@ arrayInitializer
     ;
 
 arrayCellInitializer
-    : '[' conditionalExpression']('.' Identifier)?' '=' commaExpression
+    : '[' conditionalExpression']' ('.' Identifier)? '=' commaExpression
     | '[' conditionalExpression '...' conditionalExpression ']' '=' commaExpression
     ;
 
