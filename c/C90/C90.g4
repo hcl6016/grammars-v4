@@ -302,7 +302,7 @@ statement
     |   'return' commaExpression? ';'
     |   'continue' ';'
     |   'break' ';'
-    |   ';'
+    |   gccAttributeSpecifier* ';'
     ;
 
 label
