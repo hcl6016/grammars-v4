@@ -95,40 +95,62 @@ complex
     :   '_Complex' | '__complex__'
     ;
 
-typeName
-    : 'int'
-    | 'int' longLongShort
-    | unsignedOrSigned 'int'?
-    | unsignedOrSigned? longLongShort 'int'?
-    | longLongShort? unsignedOrSigned 'int'?
-    | longLongShort
-    | unsignedOrSigned? longLongShort 'int'?
-    | unsignedOrSigned? '__int128'
-    | unsignedOrSigned? 'char'
-    | 'float'
-    | 'long'? 'double'
-    | 'float'? complex
-    | 'long'? 'double' complex
+signedUnsigned
+    : 'unsigned'
+    | 'signed'
+    ;
+
+longShort
+    :  'long'
+    |  'short'
+    ;
+
+
+intTypeName
+    : ('int'| complex | signedUnsigned | longShort)+
+    ;
+
+int128TypeName
+    : ('__int128'| complex | signedUnsigned)+
+    ;
+
+charTypeName
+    : ('char'| complex | signedUnsigned)+
+    ;
+
+floatTypeName
+    : 'float'
+    | 'double'
+    | 'long' 'double'
+    | 'double' 'long'
     | complex 'float'
-    | complex 'long'? 'double'
-    | 'long'? unsignedOrSigned? 'int'? complex
-    | complex 'long'? unsignedOrSigned? 'int'
+    | complex 'double'
+    | complex 'long' 'double'
+    | complex 'double' 'long'
+    | 'float' complex
+    | 'double' complex
+    | 'long' 'double' complex
+    | 'dobile' 'long' complex
+    | 'long' complex 'double'
+    | 'double' complex 'long'
+    | '__float128'
+    | '__float80'
+    | '_Decimal32'
+    | '_Decimal64'
+    | '_Decimal128'
+    ;
+
+
+typeName
+    : intTypeName
+    | int128TypeName
+    | charTypeName
+    | floatTypeName
     | 'void'
     | ('struct'|'union') Identifier
     | 'enum' Identifier
     | '__builtin_va_list'
     | Identifier
-    ;
-
-unsignedOrSigned
-    : 'unsigned'
-    | 'signed'
-    ;
-
-longLongShort
-    :  'long' 'long'
-    |  'long'
-    |  'short'
     ;
 
 typeModifier
@@ -666,7 +688,7 @@ BinaryConstant
     ;
 
 HexadecimalConstant
-    :   HexadecimalPrefix HexadecimalDigit+ IntegerSuffix?
+    :   HexadecimalPrefix HexadecimalDigitSequence IntegerSuffix?
     ;
 
 fragment
@@ -675,12 +697,35 @@ HexadecimalPrefix
     ;
 
 FloatingConstant
-    :   DecimalFloatingConstant FloatingSuffix?
+    :   DecimalFloatingConstant
+    |   HexadecimalFloatingConstant
     ;
 
 fragment
 DecimalFloatingConstant
     :   (FractionalConstant ExponentPart? | DigitSequence ExponentPart) FloatingSuffix?
+    ;
+
+
+fragment
+HexadecimalDigitSequence
+    :   HexadecimalDigit+
+    ;
+
+fragment
+HexadecimalFractionalConstant
+    :   HexadecimalDigitSequence? '.' HexadecimalDigitSequence
+    |   HexadecimalDigitSequence '.'
+    ;
+
+fragment
+BinaryExponentPart
+    :   [pP] Sign? DigitSequence
+    ;
+
+fragment
+HexadecimalFloatingConstant
+    :   HexadecimalPrefix (HexadecimalFractionalConstant | HexadecimalDigitSequence) BinaryExponentPart FloatingSuffix?
     ;
 
 fragment
