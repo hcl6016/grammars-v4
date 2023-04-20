@@ -567,7 +567,7 @@ enumList
     ;
 
 enumItem
-    : Identifier ('=' inclusiveOrExpression)?
+        : Identifier gccAttributeSpecifier* ('=' inclusiveOrExpression)?
     ;
 
 Identifier
