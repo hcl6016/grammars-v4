@@ -348,7 +348,7 @@ switchStatement
     ;
 
 caseLabel
-    : 'case' (literal | conditionalExpression) ':'
+    : 'case' conditionalExpression ('...' conditionalExpression)? ':'
     ;
 
 defaulLabel
