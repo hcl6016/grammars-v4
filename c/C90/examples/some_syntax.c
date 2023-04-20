@@ -9,10 +9,13 @@ struct __attribute__((packed)) MyStruct { long long a; char b; };
 typedef int __attribute__((vector_size (8))) vec;
 
 unsigned long long int * const sssa,cccc;
+;;
 
 /* unary expression */
 void paramGoto(int param){
+    ;;
     goto *(void*)param;
+    ;;
 }
 
 /* postfix expression, arrays */
