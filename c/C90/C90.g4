@@ -60,10 +60,9 @@ typeWillBeDeclared
 
 //if type not spedified : default return int
 type
-    :   '__extension__'? gccDeclaratorExtension* storageFuncSpecifier* typeQualifier*
-        gccDeclaratorExtension*
+    :   '__extension__'? (storageFuncSpecifier | typeQualifier | gccDeclaratorExtension)*
         (typeName | typeofExpr | typeQualifier | storageFuncSpecifier)
-        storageFuncSpecifier* typeQualifier* gccDeclaratorExtension*
+        (storageFuncSpecifier | typeQualifier | gccDeclaratorExtension)*
     ;
 
 typeOrDecl
@@ -173,7 +172,6 @@ fixedParameterOrTypeList
 
 parameterOrTypeList
     : fixedParameterOrTypeList (',' '...')?
-    | 'void'
     ;
 
 parametersKandRlist
@@ -308,14 +306,9 @@ ptrnamePlace
     ;
 /*** end declarator ***/
 
-structInitializer
-    : '{' (fieldInitializer (',' fieldInitializer)* ','? )? '}'
-    ;
-
 initializer
     :  assignmentExpression
-    |  structInitializer
-    |  arrayInitializer
+    |  arrayStructInitializer
     ;
 
 fieldInitializer
@@ -324,8 +317,8 @@ fieldInitializer
     | Identifier ':' initializer
     ;
 
-arrayInitializer
-    : '{' assignmentExpression (',' assignmentExpression)* '}'
+arrayStructInitializer
+    : '{' (fieldInitializer (',' fieldInitializer)* ','? )? '}'
     | '{' arrayCellInitializer (',' arrayCellInitializer)* '}' //for incomplete initialization
     ;
 
@@ -546,7 +539,7 @@ multiplicativeExpression
 
 castExpression
     :   unaryExpression
-    |   '__extension__'? '(' gccDeclaratorExtension* typeSpecifier ')' (castExpression | arrayInitializer | structInitializer)
+    |   '__extension__'? '(' gccDeclaratorExtension* typeSpecifier ')' (castExpression | arrayStructInitializer)
     ;
 
 unaryOperator
