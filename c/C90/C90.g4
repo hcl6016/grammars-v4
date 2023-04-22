@@ -105,17 +105,26 @@ longShort
     |  'short'
     ;
 
-
 intTypeName
     : ('int'| complex | signedUnsigned | longShort)+
     ;
 
 int128TypeName
-    : ('__int128'| complex | signedUnsigned)+
+    : '__int128' complex? signedUnsigned?
+    | '__int128' signedUnsigned complex
+    | signedUnsigned '__int128' complex?
+    | signedUnsigned complex '__int128'
+    | complex '__int128' signedUnsigned?
+    | complex signedUnsigned '__int128'
     ;
 
 charTypeName
-    : ('char'| complex | signedUnsigned)+
+    : 'char' complex? signedUnsigned?
+    | 'char' signedUnsigned complex
+    | signedUnsigned 'char' complex?
+    | signedUnsigned complex 'char'
+    | complex 'char' signedUnsigned?
+    | complex signedUnsigned 'char'
     ;
 
 floatTypeName
