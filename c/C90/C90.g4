@@ -36,6 +36,7 @@ compilationUnit
 declaration
     :   functionDefinition
     |   varFuncDeclaration
+    |   varDeclaration
     |   typeDeclaration ';'
     |   typeDefinition
     |   typeWillBeDeclared
@@ -61,8 +62,13 @@ typeWillBeDeclared
 type
     :   '__extension__'? gccDeclaratorExtension* storageFuncSpecifier* typeQualifier*
         gccDeclaratorExtension*
-        (storageFuncSpecifier| typeQualifier| typeName | typeDeclaration | typeofExpr)
+        (typeName | typeofExpr | typeQualifier | storageFuncSpecifier)
         storageFuncSpecifier* typeQualifier* gccDeclaratorExtension*
+    ;
+
+typeOrDecl
+    : type
+    | typeQualifier* typeDeclaration
     ;
 
 /*
@@ -180,12 +186,12 @@ parametersKandRlist
     ;
 
 parametersKandR
-    : type gccAttributeSpecifier* (variableDeclarator | functionDeclarator) (',' gccAttributeSpecifier* (variableDeclarator | functionDeclarator) )*
+    : typeOrDecl gccAttributeSpecifier* (variableDeclarator | functionDeclarator) (',' gccAttributeSpecifier* (variableDeclarator | functionDeclarator) )*
     ;
 
 //functionDeclarator as parameter = pointer to function
 parameterOrType
-    :   type
+    :   typeOrDecl
         (variableDeclarator | variableDeclaratorPlace | functionDeclarator | functionDeclaratorPlace)
         gccDeclaratorExtension*
     ;
@@ -202,12 +208,24 @@ varFuncDeclaration
     :   type varFuncList ';'
     ;
 
+varDeclaration
+    :   typeDeclaration varList ';'
+    ;
+
 varFuncList
     : attributedDeclarator (',' attributedDeclarator)*
     ;
 
-attributedDeclarator
+varList
+    : attributedVarDeclarator (',' attributedVarDeclarator)*
+    ;
+
+attributedVarDeclarator
     :   variableDeclarator gccDeclaratorExtension* ('=' initializer)?
+    ;
+
+attributedDeclarator
+    :   attributedVarDeclarator
     |   functionDeclarator gccDeclaratorExtension*
     ;
 
@@ -335,7 +353,7 @@ variableName
 
 
 fieldDeclaration //typeName can't be void without modifiers ; bitField: anonymous field
-    : type (fieldList | bitField)? gccDeclaratorExtension*
+    : typeOrDecl (fieldList | bitField)? gccDeclaratorExtension*
     ;
 
 fieldList
@@ -550,7 +568,7 @@ unaryExpression
     |   sizeofOrAlignof '(' conditionalExpression ')'
     |   sizeofOrAlignof typeSpecifier
     |   sizeofOrAlignof conditionalExpression
-    |   '__builtin_offsetof' '(' type ',' postfixExpression ')'
+    |   '__builtin_offsetof' '(' typeOrDecl ',' postfixExpression ')'
     |  '__builtin_va_arg' '(' postfixExpression ',' typeSpecifier ')'
     |  ('__real__'|'__imag__') unaryExpression
     ;
@@ -562,7 +580,7 @@ sizeofOrAlignof
     ;
 
 typeSpecifier
-    :   type variableDeclaratorPlace
+    :   typeOrDecl variableDeclaratorPlace
     ;
 
 postfixExpression
@@ -599,7 +617,7 @@ literal
 
 typeDefinition
     : '__extension__'? 'typedef' gccDeclaratorExtension* typeQualifier*
-        type attributedDeclarator (',' attributedDeclarator)* ';'
+        typeOrDecl attributedDeclarator (',' attributedDeclarator)* ';'
     ;
 
 
