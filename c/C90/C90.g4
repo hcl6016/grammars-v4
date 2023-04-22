@@ -71,13 +71,8 @@ typeOrDecl
     | typeQualifier* typeDeclaration
     ;
 
-/*
-two similar alts is faster here than
-type? attributedDeclarator parametersKandRlist? compoundStatement
-*/
 functionDefinition
-    :   type? functionDeclarator compoundStatement
-    |   type? functionDeclarator parametersKandRlist compoundStatement
+    :   type? functionDeclarator parametersKandRlist? compoundStatement
     ;
 
 varListKandR
