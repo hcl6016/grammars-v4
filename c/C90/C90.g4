@@ -62,7 +62,7 @@ type
     :   '__extension__'? gccDeclaratorExtension* storageFuncSpecifier* typeQualifier*
         gccDeclaratorExtension*
         (storageFuncSpecifier| typeQualifier| typeName | typeDeclaration | typeofExpr)
-        storageFuncSpecifier* gccDeclaratorExtension*
+        storageFuncSpecifier* typeQualifier* gccDeclaratorExtension*
     ;
 
 /*
@@ -70,8 +70,8 @@ two similar alts is faster here than
 type? attributedDeclarator parametersKandRlist? compoundStatement
 */
 functionDefinition
-    :   type? attributedDeclarator compoundStatement
-    |   type? attributedDeclarator parametersKandRlist compoundStatement
+    :   type? functionDeclarator compoundStatement
+    |   type? functionDeclarator parametersKandRlist compoundStatement
     ;
 
 varListKandR
@@ -180,11 +180,14 @@ parametersKandRlist
     ;
 
 parametersKandR
-    : type declarator (',' declarator)*
+    : type gccAttributeSpecifier* (variableDeclarator | functionDeclarator) (',' gccAttributeSpecifier* (variableDeclarator | functionDeclarator) )*
     ;
 
+//functionDeclarator as parameter = pointer to function
 parameterOrType
-    :   type (declarator | declaratorPlace) gccDeclaratorExtension*
+    :   type
+        (variableDeclarator | variableDeclaratorPlace | functionDeclarator | functionDeclaratorPlace)
+        gccDeclaratorExtension*
     ;
 
 compoundStatement
@@ -204,40 +207,91 @@ varFuncList
     ;
 
 attributedDeclarator
-    :   declarator gccDeclaratorExtension* ('=' initializer)?
+    :   variableDeclarator gccDeclaratorExtension* ('=' initializer)?
+    |   functionDeclarator gccDeclaratorExtension*
     ;
 
 /*** declarator ***/
-declarator
-    :   (typeModifier | typeQualifier) gccAttributeSpecifier* declarator
-    |   baseDeclarator
-    |   declaratorName
-    |   '(' gccAttributeSpecifier* declarator ')'
+variableDeclarator
+    : typeQualifier* name
+    | variablePtrDeclarator
     ;
 
-baseDeclarator
-    :   declaratorName (functionParameters | array)
-    |   '('  declarator ')' (functionParameters | array)
+variablePtrDeclarator
+    :   gccAttributeSpecifier* ptrname
+    |   (typeModifier | gccAttributeSpecifier)* variableSubDeclarator
     ;
 
-declaratorName
-    :   visualExtensionFCall* Identifier
+variableSubDeclarator
+    :   '(' variablePtrDeclarator ')' functionParameters
     ;
 
-declaratorPlace
-    :   (typeModifier | typeQualifier) declaratorPlace
-    |   baseDeclaratorPlace
-    |   declaratorNamePlace
-    |   '(' declaratorPlace ')'
+variableDeclaratorPlace
+    : typeQualifier* namePlace
+    | variablePtrDeclaratorPlace
     ;
 
-baseDeclaratorPlace
-    :   declaratorNamePlace (functionParameters | array)
-    |   '('  declaratorPlace ')' (functionParameters | array)
+variablePtrDeclaratorPlace
+    :   ptrnamePlace
+    |   typeModifier* variableSubDeclaratorPlace
     ;
 
-declaratorNamePlace
-    :   visualExtensionFCall*
+variableSubDeclaratorPlace
+    :   '(' variablePtrDeclaratorPlace ')' functionParameters
+    ;
+
+functionDeclarator
+    :   gccDeclaratorExtension* functionSubDeclarator
+    |   typeModifier+ gccDeclaratorExtension* functionDeclarator
+    |   '(' functionDeclarator ')' (functionParameters | array )
+    ;
+
+functionSubDeclarator
+    :   '(' functionDeclarator ')'
+    |   name functionParameters
+    ;
+
+functionDeclaratorPlace
+    :   gccDeclaratorExtension* functionSubDeclaratorPlace
+    |   typeModifier+ gccDeclaratorExtension* functionDeclaratorPlace
+    |   '(' functionDeclaratorPlace ')' (functionParameters | array )
+    ;
+
+functionSubDeclaratorPlace
+    :   '(' functionDeclarator ')'
+    |   namePlace functionParameters
+    ;
+
+name
+    :   '(' name ')'
+    |   Identifier
+    ;
+
+arrname
+    :   name array
+    |   '(' ptrname ')' array
+    ;
+
+ptrname
+    :  typeModifier (typeModifier | gccAttributeSpecifier| typeQualifier)* name
+    |   (typeModifier | gccAttributeSpecifier | typeQualifier)* arrname
+    |   (typeModifier | gccAttributeSpecifier | typeQualifier)* '(' ptrname ')'
+    ;
+
+namePlace
+    :   '(' namePlace ')'
+    |   /*empty*/
+    ;
+
+arrnamePlace
+    :   namePlace array
+    |   '(' ptrnamePlace ')' array
+    ;
+
+ptrnamePlace
+    :   typeModifier (typeModifier | gccAttributeSpecifier| typeQualifier)* namePlace
+    |   (typeModifier | gccAttributeSpecifier | typeQualifier)* arrnamePlace
+    |   (typeModifier | gccAttributeSpecifier | typeQualifier)* '(' ptrnamePlace ')'
     ;
 /*** end declarator ***/
 
@@ -508,7 +562,7 @@ sizeofOrAlignof
     ;
 
 typeSpecifier
-    :   type declaratorPlace
+    :   type variableDeclaratorPlace
     ;
 
 postfixExpression
