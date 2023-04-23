@@ -575,12 +575,21 @@ typeSpecifier
     :   typeOrDecl variableDeclaratorPlace
     ;
 
+postfixExpressionLeft
+    :   atom
+    |   postfixExpressionLeft '(' argumentExpressionList? ')'
+    |   postfixExpressionLeft '[' assignmentExpression ']'
+    |   postfixExpressionLeft '.' Identifier
+    |   postfixExpressionLeft '->' Identifier
+    ;
+
+
 postfixExpression
     :   primaryExpression
-    |   postfixExpression '[' assignmentExpression ']'
-    |   postfixExpression '(' argumentExpressionList? ')'
+    |   postfixExpressionLeft
     |   postfixExpression '.' Identifier
     |   postfixExpression '->' Identifier
+    |   postfixExpression '[' assignmentExpression ']'
     |   postfixExpression '++'
     |   postfixExpression '--'
     ;
@@ -590,12 +599,14 @@ argumentExpressionList
     :   assignmentExpression (',' assignmentExpression)* (',' '__extension__' '__PRETTY_FUNCTION__' )?
     ;
 
-
-primaryExpression
+atom
     :   Identifier
     |   literal
     |   StringLiteral+
-    |   '(' commaExpression ')'
+    ;
+
+primaryExpression
+    :   '(' commaExpression ')'
     |   '__extension__'? '(' compoundStatement ')'
     ;
 
