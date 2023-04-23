@@ -253,7 +253,7 @@ variableSubDeclaratorPlace
 
 functionDeclarator
     :   gccDeclaratorExtension* functionSubDeclarator
-    |   typeModifier+ gccDeclaratorExtension* functionDeclarator
+    |   typeModifier+ functionDeclarator
     |   '(' functionDeclarator ')' (functionParameters | array )
     ;
 
