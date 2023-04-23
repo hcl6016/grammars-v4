@@ -561,10 +561,14 @@ unaryExpression
     |  ('__real__'|'__imag__') unaryExpression
     ;
 
+alignof
+    :   '_Alignof'
+    |   '__alignof__'
+    ;
+
 sizeofOrAlignof
     :   'sizeof'
-    |   '_Alignof'
-    |   '__alignof__'
+    |   alignof
     ;
 
 typeSpecifier
@@ -639,14 +643,15 @@ gccAttributeList
     :   gccAttribute (',' gccAttribute)*
     ;
 
-attributeAlignment
-    :   '__alignof__' '(' typeName ')'
-    |   conditionalExpression
-    ;
-
 gccAttribute
-    : Identifier ('(' (attributeAlignment | StringLiteral | (Identifier | integerConstant) ( ',' integerConstant )*) ')')?
-    | 'const'
+    :   Identifier
+    |   'const'
+    |   Identifier '(' integerConstant (',' integerConstant)* ')'
+    |   Identifier '(' StringLiteral+ ')'
+    |   Identifier '(' Identifier (',' integerConstant)* ')'
+    |   Identifier '(' alignof '(' typeName ')' ')' //Identifier = "aligned"
+    |   Identifier '(' unaryExpression '==' integerConstant ')'//Identifier = "assume"
+    |   Identifier '(' integerConstant '*' 'sizeof' '(' typeName ')' ')' //Identifier = "vector_size"
     ;
 
 enumDeclaration
