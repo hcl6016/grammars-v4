@@ -62,7 +62,7 @@ typeWillBeDeclared
 type
     :   '__extension__'? (storageFuncSpecifier | typeQualifier | gccDeclaratorExtension)*
         (typeName | typeofExpr | typeQualifier | storageFuncSpecifier)
-        (storageFuncSpecifier | typeQualifier | gccDeclaratorExtension)*
+        (storageFuncSpecifier | typeQualifier)*
     ;
 
 typeOrDecl
@@ -214,7 +214,7 @@ varList
     ;
 
 attributedVarDeclarator
-    :   variableDeclarator gccDeclaratorExtension* ('=' initializer)?
+    :   gccAttributeSpecifier* variableDeclarator gccDeclaratorExtension* ('=' initializer)?
     ;
 
 attributedDeclarator
