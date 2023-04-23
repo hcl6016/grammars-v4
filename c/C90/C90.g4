@@ -539,7 +539,7 @@ multiplicativeExpression
 
 castExpression
     :   unaryExpression
-    |   '__extension__'? '(' gccDeclaratorExtension* typeSpecifier ')' (castExpression | arrayStructInitializer)
+    |   '__extension__'? '(' typeSpecifier ')' (castExpression | arrayStructInitializer)
     ;
 
 unaryOperator
