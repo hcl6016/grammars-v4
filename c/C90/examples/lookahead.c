@@ -1,0 +1,35 @@
+void fun() {
+    long double f1;
+    long double f2;    
+    long double f3;
+    long double f4;
+    long double f5;
+    long double f6;
+    long double f7;
+    long double f8;
+    long double f9;
+    long double f10;    
+    long double f11;
+    long double f12;
+    long double f13;
+    long double f14;
+    long double f15;
+    long double f16;
+    long double f17;
+    long double f18;    
+    long double f19;
+    long double f20;
+    long double f21;
+    long double f22;
+    long double f23;
+    long double f24;
+    long double f25;
+    long double f26;    
+    long double f27;
+    long double f28;
+    long double f29;
+    long double f30;
+    long double f31;
+    long double f32; 
+}
+

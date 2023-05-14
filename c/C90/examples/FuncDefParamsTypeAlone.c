@@ -1,0 +1,3 @@
+int typeWithoutParams(int,int) {
+    
+}
